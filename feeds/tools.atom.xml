@@ -46,8 +46,8 @@ for the app you want events from. Make sure the &lt;code&gt;Sharing for config f
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;The new eventgen app does not have a setup page when you go to it under &lt;code&gt;Apps&lt;/code&gt;, just statistics on the generated events.
-So the only way I found to enable and disable it is to go to &lt;code&gt;Apps&lt;/code&gt; -&amp;gt; &lt;code&gt;Manage Apps&lt;/code&gt;and click on &lt;code&gt;Set Up&lt;/code&gt; on the row of the eventgen app. Mark and unmark
-the &lt;code&gt;Enable ./bin/eventgen.py&lt;/code&gt; checkbox to enable/disable event generation.&lt;/p&gt;
+So the only way I found to enable and disable it is to go to &lt;code&gt;Apps&lt;/code&gt; -&amp;gt; &lt;code&gt;Manage Apps&lt;/code&gt; and click on &lt;code&gt;Set Up&lt;/code&gt; on the row of
+the eventgen app. Mark and unmark the &lt;code&gt;Enable ./bin/eventgen.py&lt;/code&gt; checkbox to enable/disable event generation.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;One this is done, eventgen will inspect all other installed apps it can access (hence the permissions step above) and
