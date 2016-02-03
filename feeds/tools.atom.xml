@@ -50,6 +50,6 @@ So the only way I found to enable and disable it is to go to &lt;code&gt;Apps&lt
 the eventgen app. Mark and unmark the &lt;code&gt;Enable ./bin/eventgen.py&lt;/code&gt; checkbox to enable/disable event generation.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;One this is done, eventgen will inspect all other installed apps it can access (hence the permissions step above) and
+&lt;p&gt;Once this is done, eventgen will inspect all other installed apps it can access (hence the permissions step above) and
 generate fake events for them according to their configurations, usually directly to the &lt;code&gt;main&lt;/code&gt; index. No easy way to
 choose which apps to generate events from at this time, unfortunately.&lt;/p&gt;</summary><category term="splunk"></category><category term="siem"></category></entry></feed>
