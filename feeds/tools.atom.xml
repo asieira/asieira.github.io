@@ -4,22 +4,23 @@ because it has embraced the development paradigm, and organizes standard and use
 lets you write code in proper languages like Python or Java to process the data in ways that go beyond their own query 
 language.&lt;/p&gt;
 &lt;p&gt;Which brings me to how it is that you can develop and test an app for security devices and environments you don't 
-personally have access to. Actual sample log data is not easy to come by, and even when you it some Splunk apps expect
-the log data to come from syslog or other input methods, and reading from a file on disk is not always trivial. &lt;/p&gt;
+personally have access to. Actual sample log data is not easy to come by. And even if you find it some Splunk apps 
+expect the log data to be ingested in particular ways (e.g. syslog), and replaying them from a file on disk is not 
+always trivial. &lt;/p&gt;
 &lt;p&gt;This is a concern both if you are writing a new app that will be used by others, or if you want to ensure that your
 internal organization's apps are able to correctly handle log entries that are infrequent or that you might not
 have encountered before. For example, the 
 &lt;a href="https://docs.splunk.com/Documentation/CIM/latest/User/IntrusionDetection"&gt;Network Intrusion CIM model&lt;/a&gt;
-does not specifiy a finite list of possible values for the &lt;code&gt;action&lt;/code&gt; field. And until you see some test examples you
-wouldn't have imagined that the Check Point OPSEC TA field extractions will have the service name instead of the port 
-number in the &lt;code&gt;dest_port&lt;/code&gt; field of the 
+does not specify a finite list of possible values for the &lt;code&gt;action&lt;/code&gt; field. And until you see some test examples you
+won't know that the Check Point OPSEC TA field extractions will have the service name instead of the port number in the 
+&lt;code&gt;dest_port&lt;/code&gt; field of the 
 &lt;a href="https://docs.splunk.com/Documentation/CIM/latest/User/NetworkTraffic"&gt;Network Traffic CIM model&lt;/a&gt;. So you'll need to 
-get a representative set of events and find what out values your product's TAs actually generate if you want to ensure
-your app will adequately survive its first encounter with with real events out there in the wilderness.&lt;/p&gt;
-&lt;p&gt;Looking into this for the &lt;a href="https://splunkbase.splunk.com/app/2777/"&gt;Niddel app&lt;/a&gt; I ran into a very useful tool called 
-&lt;a href="https://github.com/splunk/eventgen"&gt;eventgen&lt;/a&gt;. Basically what I have found is that most Splunk-developed apps, and
-many develop by third parties, are shipped with configuration that allow you to easily generate sample log data that you
-can then use to test your content. &lt;/p&gt;
+get a representative set of events and find what out values the TAs actually generate if you want to ensure your content 
+will adequately survive its first encounter with with real events out there in the wilderness.&lt;/p&gt;
+&lt;p&gt;Looking into this for the &lt;a href="https://splunkbase.splunk.com/app/2777/"&gt;Niddel app&lt;/a&gt; I stumbled upon a very useful tool 
+called &lt;a href="https://github.com/splunk/eventgen"&gt;eventgen&lt;/a&gt;. Basically what I have found is that most Splunk-developed apps,
+and many developed by third parties, are shipped with configurations that allow you to easily generate sample log data 
+that you can then use to test your content. &lt;/p&gt;
 &lt;p&gt;The &lt;a href="https://github.com/splunk/eventgen/blob/develop/README/Tutorial.md"&gt;eventgen tutorial&lt;/a&gt; is very thorough and the
 tool is very well documented. However the documentation is almost exclusively focused on app developers which want to
 support event generation in their apps. Very little is said about how to simply use the functionality the app developers
@@ -27,7 +28,7 @@ already built-in. So let me try to help fill in the gaps here with the TL;DR ver
 development-only Splunk instances:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;First, confirm if the particular app or TA you are interested on has that configuration: go to its directory
+&lt;p&gt;First, confirm if the particular app or TA you are interested in has that configuration: go to its directory
 under &lt;code&gt;$SPLUNK_HOME/etc/apps&lt;/code&gt; (or download it from &lt;a href="https://splunkbase.splunk.com"&gt;SplunkBase&lt;/a&gt; and check within the 
 archive) for a &lt;code&gt;samples&lt;/code&gt; directory and a &lt;code&gt;default/eventgen.conf&lt;/code&gt; file. If it's there, you're in luck.&lt;/p&gt;
 &lt;/li&gt;
