@@ -11,7 +11,7 @@ am sure he is not alone. &lt;/p&gt;
 &lt;p&gt;So let's focus on automating the use of simple network indicators (IP addresses, domain names and URLs, mostly) that 
 most companies will obtain from public or private threat intelligence feeds. Let me show why &lt;em&gt;using them directly as 
 signatures&lt;/em&gt;, such as automatically generating IDS signatures and/or SIEM rules to alert or block on direct matches to 
-them is very troublesome. Organizations that do that will, in my experience, be most likely flooded with false 
+them, is very troublesome. Organizations that do that will, in my experience, be most likely flooded with false 
 positives.&lt;/p&gt;
 &lt;p&gt;&lt;img alt="False positives, false positives everywhere!" src="http://asieira.github.io/images/indicators-are-not-signatures/false-positives.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Let me go over a (far from complete) list of reasons why.&lt;/p&gt;
