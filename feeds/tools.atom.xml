@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="http://asieira.github.io/" rel="alternate"></link><link href="http://asieira.github.io/feeds/tools.atom.xml" rel="self"></link><id>http://asieira.github.io/</id><updated>2016-02-13T02:03:00-02:00</updated><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="http://asieira.github.io/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-13:threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;I have recently participated in a 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tools.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-02-13T02:03:00-02:00</updated><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://asieira.github.io/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-13:threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;I have recently participated in a 
 &lt;a href="https://www.blackhat.com/html/webcast/01212016-data-driven-threat-intelligence.html"&gt;Black Hat webcast&lt;/a&gt;
 with &lt;a href="https://www.twitter.com/bhaskar_vk"&gt;Bhaskar Karambelkar&lt;/a&gt;, which was sponsored by 
 &lt;a href="https://threatconnect.com/"&gt;ThreatConnect&lt;/a&gt;. This was related to the Black Hat 2015 session called 
@@ -13,7 +13,7 @@ most companies will obtain from public or private threat intelligence feeds. Let
 signatures&lt;/em&gt;, such as automatically generating IDS signatures and/or SIEM rules to alert or block on direct matches to 
 them, is very troublesome. Organizations that do that will, in my experience, be most likely flooded with false 
 positives.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="False positives, false positives everywhere!" src="http://asieira.github.io/images/indicators-are-not-signatures/false-positives.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="False positives, false positives everywhere!" src="https://asieira.github.io/images/indicators-are-not-signatures/false-positives.png" /&gt;&lt;/p&gt;
 &lt;p&gt;Let me go over a (far from complete) list of reasons why.&lt;/p&gt;
 &lt;h2&gt;Affirming the Consequent Fallacy&lt;/h2&gt;
 &lt;p&gt;In order to reliably generate an alert based on network traffic, you need to identify a situation in which the 
@@ -95,7 +95,7 @@ computer-readable indicators.&lt;/p&gt;
 &lt;p&gt;I hope this article helps people realize that organizations need to put proper processes and/or automation in place to 
 overcome the problems identified above if they decide to use threat intelligence indicators for detection. Even though 
 threat intelligence indicators are really valuable allies to information security monitoring and DFIR initiatives, they 
-are not signatures and should be used with appropriate care.&lt;/p&gt;</summary><category term="threat intelligence"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="http://asieira.github.io/test-data-to-develop-splunk-content.html" rel="alternate"></link><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-02:test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
+are not signatures and should be used with appropriate care.&lt;/p&gt;</summary><category term="threat intelligence"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="https://asieira.github.io/test-data-to-develop-splunk-content.html" rel="alternate"></link><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-02:test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
 because it has embraced the development paradigm, and organizes standard and user-developed content into apps. And it 
 lets you write code in proper languages like Python or Java to process the data in ways that go beyond their own query 
 language.&lt;/p&gt;
@@ -133,7 +133,7 @@ archive) for a &lt;code&gt;samples&lt;/code&gt; directory and a &lt;code&gt;defa
 or the eventgen app (installed later) won't be able to access its sample data and configurations. The simplest way to 
 do this is on Splunk Web is to navigate to &lt;code&gt;Apps&lt;/code&gt; -&amp;gt; &lt;code&gt;Manage Apps&lt;/code&gt; and click on &lt;code&gt;Permissions&lt;/code&gt; under the &lt;code&gt;Sharing&lt;/code&gt; column
 for the app you want events from. Make sure the &lt;code&gt;Sharing for config file-only objects&lt;/code&gt; option is set to &lt;code&gt;All apps&lt;/code&gt;: 
-&lt;img alt="Splunk app permissions" src="http://asieira.github.io/images/splunk-test-data/app-permissions.png" /&gt;&lt;/p&gt;
+&lt;img alt="Splunk app permissions" src="https://asieira.github.io/images/splunk-test-data/app-permissions.png" /&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Download the &lt;a href="https://github.com/splunk/eventgen/"&gt;eventgen GitHub repository&lt;/a&gt; as a 
