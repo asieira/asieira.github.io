@@ -84,10 +84,9 @@ purposes. Firstly, we know that miscreants can and will
 &lt;a href="https://en.wikipedia.org/wiki/Fast_flux"&gt;switch the IP addresses a domain resolves to often&lt;/a&gt;, and the IPs you
 receive will most likely be outdated by the time you get to use them. Second, it's not uncommon for malicious domains
 to be using a service like &lt;a href="https://www.cloudflare.com/"&gt;CloudFlare&lt;/a&gt;, &lt;a href="https://www.incapsula.com/"&gt;Incapsula&lt;/a&gt; or a 
-some shared hosting service. So if you resolve the domain, you'll get an IP address that's shared with possibly hundreds
-of benign websites. Or it could be temporarily parked at a benign IP address such as 8.8.8.8. Again, knowing that a 
-domain is malicious does not necessarily mean that all of the IPs it resolves to are mostly or completely malicious as
-well.&lt;/p&gt;
+shared hosting service. So if you resolve the domain, you'll get an IP address that's shared with possibly hundreds of
+benign websites. Or it could be temporarily parked at a benign IP address such as 8.8.8.8. Again, knowing that a domain 
+is malicious does not necessarily mean that all of the IPs it resolves to are mostly or completely malicious as well.&lt;/p&gt;
 &lt;p&gt;Feed providers, take note: having this extra information would be more helpful if it was possible to distinguish the 
 &lt;em&gt;principled&lt;/em&gt; indicators from the &lt;em&gt;derived&lt;/em&gt; ones. But alas, this information is often not present in the 
 computer-readable indicators.&lt;/p&gt;
