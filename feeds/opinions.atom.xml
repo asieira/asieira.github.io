@@ -5,8 +5,8 @@ with &lt;a href="https://www.twitter.com/bhaskar_vk"&gt;Bhaskar Karambelkar&lt;/
 &lt;a href="https://threatconnect.com/"&gt;ThreatConnect&lt;/a&gt;. This was related to the Black Hat 2015 session called 
 &lt;a href="https://youtu.be/6JMEKnes-w0?list=PLnKLzDQgx6bPRfNuf3sA2Sy2JDjbcg0P5"&gt;Data-Driven Threat Intelligence: Metrics On Indicator Dissemination And Sharing&lt;/a&gt;,
 which I had the pleasure to co-present with my good friend &lt;a href="https://twitter.com/alexcpsec"&gt;Alex Pinto&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;At the end of the webcast, someone asked me a question about I point I had made about threat intelligence indicators
-having multiple uses, but that they are not signatures. One of the audience members was a bit baffled by this, and I
+&lt;p&gt;At the end of the webcast, someone asked me a question about a comment I had made on how threat intelligence indicators
+have multiple uses, but should not be used as signatures. One of the audience members was a bit baffled by this, and I 
 am sure he is not alone. &lt;/p&gt;
 &lt;p&gt;So let's focus on automating the use of simple network indicators (IP addresses, domain names and URLs, mostly) that 
 most companies will obtain from public or private threat intelligence feeds. Let me show why &lt;em&gt;using them directly as 
