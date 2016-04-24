@@ -1,5 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/all.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-02-13T02:03:00-02:00</updated><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://asieira.github.io/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-13:threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;I have recently participated in a 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/all.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-03-18T10:39:00-03:00</updated><entry><title>In Memoriam: Lucas Eustaquio Gomes da Silva (August 27th 1982 - April 24th, 2016)</title><link href="https://asieira.github.io/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html" rel="alternate"></link><published>2016-03-18T10:39:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-03-18:in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</id><summary type="html">&lt;p&gt;Today myself and the rest of the Niddel were devastated to learn that our dear friend 
+&lt;a href="https://br.linkedin.com/in/lucas-eustaquio-gomes-da-silva-16522816"&gt;Lucas Eustaquio Gomes da Silva&lt;/a&gt;,
+our Senior Data Scientist and dear friend, has passed away after a brave battle against an aggressive form of 
+&lt;a href="http://kickingcancerass.blogspot.com.br/"&gt;cancer&lt;/a&gt;. &lt;/p&gt;
+&lt;p&gt;Our deepest condolences to his family, which are in our thoughts in this moment of pain and mourning.
+The funeral service will be held in &lt;a href="http://www.bosqueesperanca.com.br/"&gt;Belo Horizonte&lt;/a&gt; tomorrow, April 25th, 
+at 10am BRT.&lt;/p&gt;
+&lt;p&gt;Lucas was a fun, brilliant, confident and hard-working man. We are thankful for the time we had to
+work with and learn from him, and are truly saddened by how tragically short that time was. Today the 
+world loses an amazing human being, and one of its 
+&lt;a href="http://blog.kaggle.com/2016/02/22/profiling-top-kagglers-leustagos-current-7-highest-1/"&gt;most talented data scientists&lt;/a&gt;,
+which was liked and will be missed by his 
+&lt;a href="https://www.kaggle.com/forums/f/15/kaggle-forum/t/20388/data-scientist-hero"&gt;colleagues and peers&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Rest in peace, Lucas. You will be missed, and we will do our best to ensure your work lives on. That the dream
+you shared with us will be realized, whatever the odds.&lt;/p&gt;</summary><category term="personal"></category></entry><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://asieira.github.io/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-13:threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;I have recently participated in a 
 &lt;a href="https://www.blackhat.com/html/webcast/01212016-data-driven-threat-intelligence.html"&gt;Black Hat webcast&lt;/a&gt;
 with &lt;a href="https://www.twitter.com/bhaskar_vk"&gt;Bhaskar Karambelkar&lt;/a&gt;, which was sponsored by 
 &lt;a href="https://threatconnect.com/"&gt;ThreatConnect&lt;/a&gt;. This was related to the Black Hat 2015 session called 
@@ -94,7 +108,7 @@ computer-readable indicators.&lt;/p&gt;
 &lt;p&gt;I hope this article helps people realize that organizations need to put proper processes and/or automation in place to 
 overcome the problems identified above if they decide to use threat intelligence indicators for detection. Even though 
 threat intelligence indicators are really valuable allies to information security monitoring and DFIR initiatives, they 
-are not signatures and should be used with appropriate care.&lt;/p&gt;</summary><category term="threat intelligence"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="https://asieira.github.io/test-data-to-develop-splunk-content.html" rel="alternate"></link><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-02:test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
+are not signatures and should be used with appropriate care.&lt;/p&gt;</summary><category term="threat intelligence"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="https://asieira.github.io/test-data-to-develop-splunk-content.html" rel="alternate"></link><published>2016-02-02T17:40:00-02:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-02:test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
 because it has embraced the development paradigm, and organizes standard and user-developed content into apps. And it 
 lets you write code in proper languages like Python or Java to process the data in ways that go beyond their own query 
 language.&lt;/p&gt;
