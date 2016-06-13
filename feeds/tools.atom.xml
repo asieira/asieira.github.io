@@ -6,7 +6,7 @@ serialize and deserialize values between Python and R was beautifully simple and
 suffered from a more than a few issues. Plus, I noticed that the codebase hadn't been updated in a long
 time, was based on direct C code and used RJSONIO for the underlying JSON conversions.&lt;/p&gt;
 &lt;p&gt;So I decided to create a new package called &lt;a href="https://github.com/asieira/SnakeCharmR"&gt;SnakeCharmR&lt;/a&gt; inspired
-by rPython but with the following differences:&lt;/p&gt;
+by &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; but with the following differences:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
 &lt;p&gt;Use &lt;a href="https://cran.r-project.org/web/packages/Rcpp/index.html"&gt;Rcpp&lt;/a&gt; instead of direct R to C bindings;&lt;/p&gt;
@@ -17,8 +17,8 @@ well-behaved &lt;a href="https://cran.r-project.org/web/packages/jsonlite/index.
 / deserialization;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Allow the calling code to have full control of the options to be passed to jsonlite::fromJSON and 
-jsonlite:toJSON; &lt;/p&gt;
+&lt;p&gt;Allow the calling code to have full control of the options to be passed to &lt;code&gt;jsonlite::fromJSON&lt;/code&gt; and 
+&lt;code&gt;jsonlite::toJSON&lt;/code&gt;;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Use &lt;a href="https://cran.r-project.org/web/packages/testthat/index.html"&gt;testthat&lt;/a&gt; for unit testing as
