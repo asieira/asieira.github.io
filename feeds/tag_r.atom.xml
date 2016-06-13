@@ -124,4 +124,6 @@ Exception&lt;span class="o"&gt;:&lt;/span&gt; uh oh
 out &lt;a href="https://github.com/asieira/SnakeCharmR/issues"&gt;GitHub issues&lt;/a&gt; and help if you can.&lt;/p&gt;
 &lt;p&gt;The most relevant gap is testing and ensuring SnakeCharmR works correctly on Windows. If any of you 
 have had experience with compiling Rcpp packages that use external libraries on Windows, your help 
-will be much appreciated.&lt;/p&gt;</summary><category term="R"></category><category term="Python"></category></entry></feed>
+will be much appreciated.&lt;/p&gt;
+&lt;p&gt;Many thanks to &lt;a href="https://twitter.com/hrbrmstr"&gt;Bob Rudis&lt;/a&gt; for his invaluable help in getting this 
+project going. &lt;/p&gt;</summary><category term="R"></category><category term="Python"></category></entry></feed>
