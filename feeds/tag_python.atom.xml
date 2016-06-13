@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_python.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-06-13T19:17:00-03:00</updated><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
-in Linux and Mac OS X environments. When I first found out about it the idea of using JSON as a way to
-serialize and deserialize values between and R was beautifully simple and intuitive.&lt;/p&gt;
+in Linux and Mac OS X environments. When I first found out about it, the idea of using JSON as a way to
+serialize and deserialize values between Python and R was beautifully simple and intuitive.&lt;/p&gt;
 &lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
 suffered from a more than a few issues. Plus, I noticed that the codebase hadn't been updated in a long
 time, was based on direct C code and used RJSONIO for the underlying JSON conversions.&lt;/p&gt;
