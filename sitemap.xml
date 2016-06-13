@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/</loc>
-<lastmod>2016-04-24T20:03:57-00:00</lastmod>
+<lastmod>2016-06-13T23:36:44-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/archives.html</loc>
-<lastmod>2016-04-24T20:03:57-00:00</lastmod>
+<lastmod>2016-06-13T23:36:44-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/tags.html</loc>
-<lastmod>2016-04-24T20:03:57-00:00</lastmod>
+<lastmod>2016-06-13T23:36:44-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/categories.html</loc>
-<lastmod>2016-04-24T20:03:57-00:00</lastmod>
+<lastmod>2016-06-13T23:36:44-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/introducing-snakecharmr.html</loc>
+<lastmod>2016-06-13T19:17:00-03:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -68,28 +75,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/category/tools.html</loc>
-<lastmod>2016-02-02T17:40:00-03:06</lastmod>
+<lastmod>2016-06-13T19:17:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/personal.html</loc>
-<lastmod>2016-04-24T19:22:00-03:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://asieira.github.io/tag/splunk.html</loc>
-<lastmod>2016-02-02T17:40:00-03:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://asieira.github.io/tag/siem.html</loc>
-<lastmod>2016-02-02T17:40:00-03:06</lastmod>
+<loc>https://asieira.github.io/tag/python.html</loc>
+<lastmod>2016-06-13T19:17:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -102,8 +95,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>https://asieira.github.io/author/alexandre-sieira.html</loc>
+<loc>https://asieira.github.io/tag/personal.html</loc>
 <lastmod>2016-04-24T19:22:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/tag/r.html</loc>
+<lastmod>2016-06-13T19:17:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/tag/siem.html</loc>
+<lastmod>2016-02-02T17:40:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/tag/splunk.html</loc>
+<lastmod>2016-02-02T17:40:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/author/alexandre-sieira.html</loc>
+<lastmod>2016-06-13T19:17:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>

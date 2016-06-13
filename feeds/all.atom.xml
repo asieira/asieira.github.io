@@ -1,5 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/all.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-04-24T19:22:00-03:00</updated><entry><title>In Memoriam: Lucas Eustaquio Gomes da Silva (August 27th 1982 - April 24th, 2016)</title><link href="https://asieira.github.io/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html" rel="alternate"></link><published>2016-04-24T19:22:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-04-24:in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</id><summary type="html">&lt;p&gt;Today myself and the rest of the Niddel team were devastated to learn that our dear friend 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/all.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-06-13T19:17:00-03:00</updated><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
+in Linux and Mac OS X environments. When I first found out about it the idea of using JSON as a way to
+serialize and deserialize values between and R was beautifully simple and intuitive.&lt;/p&gt;
+&lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
+suffered from a more than a few issues. Plus, I noticed that the codebase hadn't been updated in a long
+time, was based on direct C code and used RJSONIO for the underlying JSON conversions.&lt;/p&gt;
+&lt;p&gt;So I decided to create a new package called &lt;a href="https://github.com/asieira/SnakeCharmR"&gt;SnakeCharmR&lt;/a&gt; inspired
+by rPython but with the following differences:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Use &lt;a href="https://cran.r-project.org/web/packages/Rcpp/index.html"&gt;Rcpp&lt;/a&gt; instead of direct R to C bindings;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Replace &lt;a href="https://cran.r-project.org/web/packages/RJSONIO/index.html"&gt;RJSONIO&lt;/a&gt; with the much more 
+well-behaved &lt;a href="https://cran.r-project.org/web/packages/jsonlite/index.html"&gt;jsonlite&lt;/a&gt; for JSON serialization
+/ deserialization;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Allow the calling code to have full control of the options to be passed to jsonlite::fromJSON and 
+jsonlite:toJSON; &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use &lt;a href="https://cran.r-project.org/web/packages/testthat/index.html"&gt;testthat&lt;/a&gt; for unit testing as
+much as possible, including &lt;a href="https://travis-ci.org/asieira/SnakeCharmR"&gt;Travis&lt;/a&gt; and
+&lt;a href="https://codecov.io/gh/asieira/SnakeCharmR"&gt;Codecov&lt;/a&gt; for automation of tests and coverage.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The package is not a drop-in replacement to rPython, but most of existing code will require very few updates
+to work with it. Most of them will be related to the differences between RJSONIO and jsonlite.&lt;/p&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;p&gt;The package has not yet been submitted to CRAN, so currently this is how you install it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;devtools&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; install_github&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;asieira/SnakeCharmR&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Please refer to the &lt;a href="https://github.com/asieira/SnakeCharmR/blob/master/README.md"&gt;README&lt;/a&gt; for more details
+on linking with the proper Python version.&lt;/p&gt;
+&lt;h2&gt;Comparison with &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;A few examples of differences in the way &lt;a href="https://github.com/asieira/SnakeCharmR"&gt;SnakeCharmR&lt;/a&gt; and 
+&lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; handle some situations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="https://github.com/asieira/SnakeCharmR"&gt;SnakeCharmR&lt;/a&gt; will correctly remove any temporary values used
+for function/method arguments and/or serialized values from the Python environment. In the case
+of &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt;, they would remain in memory
+until overwritten by another operation.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Handling of strings with single quotes:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;rPython&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; python.assign&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+  File &lt;span class="s"&gt;&amp;quot;&amp;lt;string&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; line &lt;span class="m"&gt;2&lt;/span&gt;
+    a &lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39; [ &amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="err"&gt; ] &amp;#39;&lt;/span&gt;
+                 &lt;span class="o"&gt;^&lt;/span&gt;
+SyntaxError&lt;span class="o"&gt;:&lt;/span&gt; EOL &lt;span class="kr"&gt;while&lt;/span&gt; scanning string literal
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;SnakeCharmR&lt;span class="p"&gt;)&lt;/span&gt;
+SnakeCharmR v1.0.2 &lt;span class="o"&gt;-&lt;/span&gt; R and Python Integration
+Contribute and submit issues at https&lt;span class="o"&gt;://&lt;/span&gt;github.com&lt;span class="o"&gt;/&lt;/span&gt;asieira&lt;span class="o"&gt;/&lt;/span&gt;SnakeCharmR
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; py.assign&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; py.get&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Handling of strings with unicode values:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;rPython&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; python.assign&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;áéíóú&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; python.get&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;\xe1\xe9\xed\xf3\xfa&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;Encoding&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;python.get&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;unknown&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;SnakeCharmR&lt;span class="p"&gt;)&lt;/span&gt;
+SnakeCharmR v1.0.2 &lt;span class="o"&gt;-&lt;/span&gt; R and Python Integration
+Contribute and submit issues at https&lt;span class="o"&gt;://&lt;/span&gt;github.com&lt;span class="o"&gt;/&lt;/span&gt;asieira&lt;span class="o"&gt;/&lt;/span&gt;SnakeCharmR
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; py.assign&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;áéíóú&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; py.get&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;áéíóú&amp;quot;&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kp"&gt;Encoding&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;py.get&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
+&lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;UTF-8&amp;quot;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;ul&gt;
+&lt;li&gt;Improved exception handling, which in &lt;a href="https://github.com/asieira/SnakeCharmR"&gt;SnakeCharmR&lt;/a&gt; now 
+includes a full stack trace to help debugging errors that happen in Python:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;rPython&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; python.exec&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;def a():\n    return b()&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; python.exec&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;def b():\n    raise Exception(&amp;#39;uh oh&amp;#39;)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; python.call&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+Error &lt;span class="kr"&gt;in&lt;/span&gt; python.exec&lt;span class="p"&gt;(&lt;/span&gt;python.command&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; uh oh
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="kn"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;SnakeCharmR&lt;span class="p"&gt;)&lt;/span&gt;
+SnakeCharmR v1.0.2 &lt;span class="o"&gt;-&lt;/span&gt; R and Python Integration
+Contribute and submit issues at https&lt;span class="o"&gt;://&lt;/span&gt;github.com&lt;span class="o"&gt;/&lt;/span&gt;asieira&lt;span class="o"&gt;/&lt;/span&gt;SnakeCharmR
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; py.exec&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;def a():\n    return b()&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; py.exec&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;def b():\n    raise Exception(&amp;#39;uh oh&amp;#39;)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; py.call&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+Error &lt;span class="kr"&gt;in&lt;/span&gt; py.exec&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="kp"&gt;sprintf&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;_SnakeCharmR_return = json.dumps(%s(%s))&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; fname&lt;span class="p"&gt;,&lt;/span&gt;  &lt;span class="o"&gt;:&lt;/span&gt; 
+  Traceback &lt;span class="p"&gt;(&lt;/span&gt;most recent call last&lt;span class="p"&gt;)&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt;
+  File &lt;span class="s"&gt;&amp;quot;&amp;lt;string&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; line &lt;span class="m"&gt;2&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kr"&gt;in&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;module&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+  File &lt;span class="s"&gt;&amp;quot;&amp;lt;string&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; line &lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kr"&gt;in&lt;/span&gt; a
+  File &lt;span class="s"&gt;&amp;quot;&amp;lt;string&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; line &lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="kr"&gt;in&lt;/span&gt; b
+Exception&lt;span class="o"&gt;:&lt;/span&gt; uh oh
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Future Improvements&lt;/h2&gt;
+&lt;p&gt;There are still a few pending issues to work on before SnakeCharmR can be submitted to CRAN, check
+out &lt;a href="https://github.com/asieira/SnakeCharmR/issues"&gt;GitHub issues&lt;/a&gt; and help if you can.&lt;/p&gt;
+&lt;p&gt;The most relevant gap is testing and ensuring SnakeCharmR works correctly on Windows. If any of you 
+have had experience with compiling Rcpp packages that use external libraries on Windows, your help 
+will be much appreciated.&lt;/p&gt;</summary><category term="R"></category><category term="Python"></category></entry><entry><title>In Memoriam: Lucas Eustaquio Gomes da Silva (August 27th 1982 - April 24th, 2016)</title><link href="https://asieira.github.io/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html" rel="alternate"></link><published>2016-04-24T19:22:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-04-24:in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</id><summary type="html">&lt;p&gt;Today myself and the rest of the Niddel team were devastated to learn that our dear friend 
 &lt;a href="https://br.linkedin.com/in/lucas-eustaquio-gomes-da-silva-16522816"&gt;Lucas Eustaquio Gomes da Silva&lt;/a&gt;,
 our Senior Data Scientist since August 2013, has passed away after a brave battle against an aggressive form of 
 &lt;a href="http://kickingcancerass.blogspot.com.br/"&gt;cancer&lt;/a&gt;. &lt;/p&gt;
