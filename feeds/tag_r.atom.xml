@@ -1,5 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_r.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-06-13T19:17:00-03:00</updated><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_r.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-07-21T18:01:00-03:00</updated><entry><title>Using OpenMP with R packages in OS X</title><link href="https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-07-21:using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
+function properly. But when you install a package in OS X you will probably get a pre-compiled version
+of said package from &lt;a href="https://cran.r-project.org/"&gt;CRAN&lt;/a&gt; that used their build environment and the
+default package options.&lt;/p&gt;
+&lt;p&gt;Using a pre-compiled package is almost never a problem, except when the default options don't fit
+your requirements. In that case, you'll need to install them from source and make sure you get
+the compilation environment right.&lt;/p&gt;
+&lt;p&gt;I recently ran into a package that had the capability of using &lt;a href="http://openmp.org/"&gt;OpenMP&lt;/a&gt; to perform
+computation in parallel and take advantage of my MacBook Pro's multi-core processor to the fullest.
+If you are interested in how this works and how to integrate it into your own R packages, check out
+the &lt;a href="https://wrathematics.github.io/RparallelGuide/"&gt;Parallelism, R, and OpenMP&lt;/a&gt; guide by 
+&lt;a href="https://wrathematics.github.io/"&gt;Drew Schmidt&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;So this is all awesome, but there's a catch. There's always a catch, right?&lt;/p&gt;
+&lt;p&gt;Turns out the binary version of packages available at &lt;a href="https://cran.r-project.org/"&gt;CRAN&lt;/a&gt; are not
+compiled to use OpenMP, since not all systems are equipped to support it. Moreover, if you try to 
+install the package from source on OS X, it will try to use &lt;code&gt;clang&lt;/code&gt; / &lt;code&gt;clang++&lt;/code&gt; which in my experience
+does not support OpenMP either.&lt;/p&gt;
+&lt;p&gt;Before I get into how I was eventually able to fix this, if you don't have &lt;a href="http://brew.sh/"&gt;homebrew&lt;/a&gt;
+installed on your Mac yet, stop everything and go install it. Yes, now. I'll wait.&lt;/p&gt;
+&lt;p&gt;So, I found lots of outdated references to a homebrew package called &lt;code&gt;clang-omp&lt;/code&gt;, but as you can see
+at its &lt;a href="https://clang-omp.github.io/"&gt;website&lt;/a&gt; the project was moved elsewhere. And it doesn't exist
+in homebrew anymore, so that is a dead end.&lt;/p&gt;
+&lt;p&gt;What finally worked for me was to install GCC 6 using homebrew, and using it to compile the R packages
+with OpenMP support. This is how you do it using homebrew:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;brew install gcc --without-multilib
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It's important to include &lt;code&gt;--without-multilib&lt;/code&gt; since it apparently 
+&lt;a href="http://stackoverflow.com/questions/30049486/what-does-gcc-without-multilib-mean"&gt;creates problems&lt;/a&gt; with
+OpenMP. Unless you're cross-compiling to different architectures you probably won't miss it anyway.&lt;/p&gt;
+&lt;p&gt;If you already had gcc installed with homebrew, just replace &lt;code&gt;install&lt;/code&gt; above with &lt;code&gt;reinstall&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;After you do that, you'll notice that a folder &lt;code&gt;/usr/local/Cellar/gcc/&amp;lt;version&amp;gt;&lt;/code&gt; was created. Under it,
+there will be a &lt;code&gt;bin&lt;/code&gt; directory with the executables for &lt;code&gt;gcc&lt;/code&gt;, &lt;code&gt;g++&lt;/code&gt; and &lt;code&gt;gfortran&lt;/code&gt;. Take note of the
+exact path and filenames.&lt;/p&gt;
+&lt;p&gt;Next, what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code&gt; to include the following:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gcc-6
+&lt;span class="nv"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/g++-6
+&lt;span class="nv"&gt;SHLIB_CXXLD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/g++-6
+&lt;span class="nv"&gt;FC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gfortran-6
+&lt;span class="nv"&gt;F77&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gfortran-6
+&lt;span class="nv"&gt;MAKE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;make -j8
+
+&lt;span class="nv"&gt;SHLIB_OPENMP_CFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
+&lt;span class="nv"&gt;SHLIB_OPENMP_CXXFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
+&lt;span class="nv"&gt;SHLIB_OPENMP_FCFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
+&lt;span class="nv"&gt;SHLIB_OPENMP_FFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Make sure you adjust the version directory and the major version on the executable file names to match
+what homebrew installed in the last step.&lt;/p&gt;
+&lt;p&gt;After all this, uninstall the R packages you want to with OpenMP with, and 
+&lt;a href="http://stackoverflow.com/questions/1474081/how-do-i-install-an-r-package-from-source"&gt;reinstall them from source&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</summary><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
 in Linux and Mac OS X environments. When I first found out about it, the idea of using JSON as a way to
 serialize and deserialize values between Python and R was beautifully simple and intuitive.&lt;/p&gt;
 &lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
