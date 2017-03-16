@@ -160,6 +160,11 @@ even if there are no VPC subnets currently using them.&lt;/p&gt;
 clients, &lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html#AddRemoveRoutes"&gt;add a new route&lt;/a&gt;
 with that CIDR as the &lt;code&gt;Destination&lt;/code&gt; and the OpenVPN server instance as the &lt;code&gt;Target&lt;/code&gt;. &lt;/p&gt;
 &lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html#EIP_Disable_SrcDestCheck"&gt;Disable the source/destination check&lt;/a&gt; 
+on the OpenVPN Access Server instance so that it can "answer for" other ranges of IP address in the AWS network
+stack.&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Google Authenticator&lt;/h2&gt;
 &lt;p&gt;If everything else is working at this point, requiring users to have two-factor authentication using
