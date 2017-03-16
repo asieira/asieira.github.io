@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_siem.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-02-02T17:40:00-02:00</updated><entry><title>Test Data to Develop Splunk Content</title><link href="https://asieira.github.io/test-data-to-develop-splunk-content.html" rel="alternate"></link><published>2016-02-02T17:40:00-02:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-02:test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - siem</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_siem.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-02-02T17:40:00-02:00</updated><entry><title>Test Data to Develop Splunk Content</title><link href="https://asieira.github.io/test-data-to-develop-splunk-content.html" rel="alternate"></link><published>2016-02-02T17:40:00-02:00</published><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-02:/test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;Using Splunk eventgen to create sample events from different devices.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
 because it has embraced the development paradigm, and organizes standard and user-developed content into apps. And it 
 lets you write code in proper languages like Python or Java to process the data in ways that go beyond their own query 
 language.&lt;/p&gt;
@@ -37,7 +37,7 @@ archive) for a &lt;code&gt;samples&lt;/code&gt; directory and a &lt;code&gt;defa
 or the eventgen app (installed later) won't be able to access its sample data and configurations. The simplest way to 
 do this is on Splunk Web is to navigate to &lt;code&gt;Apps&lt;/code&gt; -&amp;gt; &lt;code&gt;Manage Apps&lt;/code&gt; and click on &lt;code&gt;Permissions&lt;/code&gt; under the &lt;code&gt;Sharing&lt;/code&gt; column
 for the app you want events from. Make sure the &lt;code&gt;Sharing for config file-only objects&lt;/code&gt; option is set to &lt;code&gt;All apps&lt;/code&gt;: 
-&lt;img alt="Splunk app permissions" src="https://asieira.github.io/images/splunk-test-data/app-permissions.png" /&gt;&lt;/p&gt;
+&lt;img alt="Splunk app permissions" src="https://asieira.github.io/images/splunk-test-data/app-permissions.png"&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Download the &lt;a href="https://github.com/splunk/eventgen/"&gt;eventgen GitHub repository&lt;/a&gt; as a 
@@ -52,4 +52,4 @@ the eventgen app. Mark and unmark the &lt;code&gt;Enable ./bin/eventgen.py&lt;/c
 &lt;/ul&gt;
 &lt;p&gt;Once this is done, eventgen will inspect all other installed apps it can access (hence the permissions step above) and
 generate fake events for them according to their configurations, usually directly to the &lt;code&gt;main&lt;/code&gt; index. No easy way to
-choose which apps to generate events from at this time, unfortunately.&lt;/p&gt;</summary><category term="splunk"></category><category term="siem"></category></entry></feed>
+choose which apps to generate events from at this time, unfortunately.&lt;/p&gt;</content><category term="splunk"></category><category term="siem"></category></entry></feed>

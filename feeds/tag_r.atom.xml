@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_r.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-07-21T18:01:00-03:00</updated><entry><title>Using OpenMP with R packages in OS X</title><link href="https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-07-21:using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - R</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_r.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-07-21T18:01:00-03:00</updated><entry><title>Using OpenMP with R packages in OS X</title><link href="https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
 function properly. But when you install a package in OS X you will probably get a pre-compiled version
 of said package from &lt;a href="https://cran.r-project.org/"&gt;CRAN&lt;/a&gt; that used their build environment and the
 default package options.&lt;/p&gt;
@@ -37,6 +37,7 @@ exact path and filenames.&lt;/p&gt;
 &lt;p&gt;Next, what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code&gt; to include the following:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gcc-6
 &lt;span class="nv"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/g++-6
+&lt;span class="nv"&gt;CXX1X&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;SHLIB_CXXLD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/g++-6
 &lt;span class="nv"&gt;FC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gfortran-6
 &lt;span class="nv"&gt;F77&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gfortran-6
@@ -53,7 +54,7 @@ exact path and filenames.&lt;/p&gt;
 what homebrew installed in the last step.&lt;/p&gt;
 &lt;p&gt;After all this, uninstall the R packages you want to with OpenMP with, and 
 &lt;a href="http://stackoverflow.com/questions/1474081/how-do-i-install-an-r-package-from-source"&gt;reinstall them from source&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</summary><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
+&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
 in Linux and Mac OS X environments. When I first found out about it, the idea of using JSON as a way to
 serialize and deserialize values between Python and R was beautifully simple and intuitive.&lt;/p&gt;
 &lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
@@ -180,4 +181,4 @@ out &lt;a href="https://github.com/asieira/SnakeCharmR/issues"&gt;GitHub issues&
 have had experience with compiling Rcpp packages that use external libraries on Windows, your help 
 will be much appreciated.&lt;/p&gt;
 &lt;p&gt;Many thanks to &lt;a href="https://twitter.com/hrbrmstr"&gt;Bob Rudis&lt;/a&gt; for his invaluable help in getting this 
-project going. &lt;/p&gt;</summary><category term="R"></category><category term="Python"></category></entry></feed>
+project going. &lt;/p&gt;</content><category term="R"></category><category term="Python"></category></entry></feed>

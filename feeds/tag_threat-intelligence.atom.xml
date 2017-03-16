@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_threat-intelligence.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-02-13T02:03:00-02:00</updated><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://asieira.github.io/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-13:threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;I have recently participated in a 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - threat intelligence</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_threat-intelligence.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2016-02-13T02:03:00-02:00</updated><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://asieira.github.io/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-13:/threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;A common misunderstanding that can lead to a lot of pain.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have recently participated in a 
 &lt;a href="https://www.blackhat.com/html/webcast/01212016-data-driven-threat-intelligence.html"&gt;Black Hat webcast&lt;/a&gt;
 with &lt;a href="https://www.twitter.com/bhaskar_vk"&gt;Bhaskar Karambelkar&lt;/a&gt;, which was sponsored by 
 &lt;a href="https://threatconnect.com/"&gt;ThreatConnect&lt;/a&gt;. This was related to the Black Hat 2015 session called 
@@ -13,7 +13,7 @@ most companies will obtain from public or private threat intelligence feeds. Let
 signatures&lt;/em&gt;, such as automatically generating IDS signatures and/or SIEM rules to alert or block on direct matches to 
 them, is very troublesome. Organizations that do that will, in my experience, be most likely flooded with false 
 positives.&lt;/p&gt;
-&lt;p&gt;&lt;img alt="False positives, false positives everywhere!" src="https://asieira.github.io/images/indicators-are-not-signatures/false-positives.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="False positives, false positives everywhere!" src="https://asieira.github.io/images/indicators-are-not-signatures/false-positives.png"&gt;&lt;/p&gt;
 &lt;p&gt;Let me go over a (far from complete) list of reasons why.&lt;/p&gt;
 &lt;h2&gt;Affirming the Consequent Fallacy&lt;/h2&gt;
 &lt;p&gt;In order to reliably generate an alert based on network traffic, you need to identify a situation in which the 
@@ -94,4 +94,4 @@ computer-readable indicators.&lt;/p&gt;
 &lt;p&gt;I hope this article helps people realize that organizations need to put proper processes and/or automation in place to 
 overcome the problems identified above if they decide to use threat intelligence indicators for detection. Even though 
 threat intelligence indicators are really valuable allies to information security monitoring and DFIR initiatives, they 
-are not signatures and should be used with appropriate care.&lt;/p&gt;</summary><category term="threat intelligence"></category></entry></feed>
+are not signatures and should be used with appropriate care.&lt;/p&gt;</content><category term="threat intelligence"></category></entry></feed>
