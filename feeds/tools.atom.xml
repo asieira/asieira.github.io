@@ -41,7 +41,7 @@ to be reasonably priced.&lt;/p&gt;
 &lt;p&gt;For the record, this was documented based on OpenVPN Access Server 2.1.4 and is meant as
 a rough but coherent guide to the external references I used to get this working. Hopefully
 it will save someone some time.&lt;/p&gt;
-&lt;h2&gt;OpenVPN Access Server Instance Creation&lt;/h2&gt;
+&lt;h2&gt;OpenVPN Access Server Instance&lt;/h2&gt;
 &lt;p&gt;First, go to the &lt;a href="https://aws.amazon.com/marketplace/"&gt;AWS Marketplace&lt;/a&gt; and find the 
 &lt;a href="https://aws.amazon.com/marketplace/pp/B00MI40CAE"&gt;BYOL AMI for OpenVPN Access Server&lt;/a&gt;. Then,
 follow their 
@@ -58,7 +58,7 @@ to perform the initial configuration.&lt;/p&gt;
 so that if you stop and restart it the IP address won't change.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Install Updates&lt;/h2&gt;
+&lt;h2&gt;Updates, Updates and More Updates&lt;/h2&gt;
 &lt;p&gt;The first thing you'll want to do after you have finished the SSH questions and are logged
 into the instance is to fully update it and then reboot it by running the following commands:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo su -
@@ -70,9 +70,9 @@ shutdown -r now
 
 &lt;p&gt;Please don't skip the reboot, so that all updates actually take effect, such as updates to the
 kernel and to libraries that are currently being used by running processes.&lt;/p&gt;
-&lt;h2&gt;Configure Let's Encrypt Certificates&lt;/h2&gt;
-&lt;p&gt;Now let's set up the OpenVPN Access Server web server so use Let's Encrypt certificates with
-automated renewal.&lt;/p&gt;
+&lt;h2&gt;Web Server Certificates&lt;/h2&gt;
+&lt;p&gt;Now let's set up the OpenVPN Access Server web server so use &lt;a href="https://letsencrypt.org/"&gt;Let's Encrypt&lt;/a&gt; 
+certificates with automated renewal.&lt;/p&gt;
 &lt;p&gt;First, as &lt;code&gt;root&lt;/code&gt;, &lt;a href="https://certbot.eff.org/#ubuntuother-other"&gt;install certbot&lt;/a&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /root
 wget https://dl.eff.org/certbot-auto
@@ -143,7 +143,7 @@ Let's Encrypt at exactly the same times we might end up with an accidental DDoS.
 the client software binaries and profile configuration, and also scan Google Authenticator QR codes.&lt;/p&gt;
 &lt;p&gt;Go into the admin interface and perform the configuration that best suits your needs. We'll discuss two
 particularly interesting aspects of the configuration next.&lt;/p&gt;
-&lt;h2&gt;Set Up Routing&lt;/h2&gt;
+&lt;h2&gt;Routing&lt;/h2&gt;
 &lt;p&gt;You may choose to have OpenVPN use routing instead of NAT when it forwards traffic from the connected clients
 into the VPC environment. If you do that, you can use its ability to assign different users or groups of users
 IP addresses in different ranges. This, in turn, allows you to configure Security Group rules inside the VPC
@@ -161,7 +161,7 @@ clients, &lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_R
 with that CIDR as the &lt;code&gt;Destination&lt;/code&gt; and the OpenVPN server instance as the &lt;code&gt;Target&lt;/code&gt;. &lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2&gt;Setting Up Google Authenticator&lt;/h2&gt;
+&lt;h2&gt;Google Authenticator&lt;/h2&gt;
 &lt;p&gt;If everything else is working at this point, requiring users to have two-factor authentication using
 Google Authenticator should be pretty easy by now. First, on the admin interface go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp;
 &lt;code&gt;Client Settings&lt;/code&gt; and check the box that says &lt;code&gt;Require that users provide a Google Authenticator one-time 
