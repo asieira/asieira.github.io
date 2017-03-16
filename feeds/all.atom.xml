@@ -138,7 +138,7 @@ different hours (instead of &lt;code&gt;1,13&lt;/code&gt;) for executing this. I
 Let's Encrypt at exactly the same times we might end up with an accidental DDoS.&lt;/p&gt;
 &lt;p&gt;At this point, you should be able to access the admin interface (by default in our example it would be
 &lt;code&gt;https://openvpn.example.com:943/admin&lt;/code&gt;), and not get a warning about an invalid certificate. Just remove the
-&lt;code&gt;/admin&lt;/code&gt; from the URL and you'll be send to the 
+&lt;code&gt;/admin&lt;/code&gt; from the URL and you'll land on the 
 &lt;a href="https://openvpn.net/index.php/access-server/section-faq-openvpn-as/client-configuration.html"&gt;user-focused page&lt;/a&gt; instead, where they can log in to download
 the client software binaries and profile configuration, and also scan Google Authenticator QR codes.&lt;/p&gt;
 &lt;p&gt;Go into the admin interface and perform the configuration that best suits your needs. We'll discuss two
