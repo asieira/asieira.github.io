@@ -206,10 +206,15 @@ collection.&lt;/p&gt;
 for clarity.&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;When asked about the timestamp format, choose to use a custom format and enter &lt;code&gt;%Y-%m-%dT%H:%M:%S%z&lt;/code&gt;.
-Go ISO 8601 or go home.&lt;/p&gt;
+&lt;p&gt;When asked about the timestamp format, choose to use a custom format and enter &lt;code&gt;%Y-%m-%dT%H:%M:%S%z&lt;/code&gt;.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
+&lt;p&gt;Then, update &lt;code&gt;/etc/rsyslog.conf&lt;/code&gt; as per &lt;a href="http://serverfault.com/a/592120"&gt;these instructions&lt;/a&gt; and
+restart the rsyslog service:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;service rsyslog restart
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;p&gt;Finally, you'll need to enable the service to run via systemd (as &lt;code&gt;root&lt;/code&gt;):&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; awslogs
 &lt;/pre&gt;&lt;/div&gt;
