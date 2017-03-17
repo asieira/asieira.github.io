@@ -179,6 +179,55 @@ example), and choose &lt;code&gt;Login&lt;/code&gt; instead of &lt;code&gt;Conne
 &lt;p&gt;In this page, they'll the given the choice to download a connection client or a profile configuration they
 can import into an existing client. But they will also be displayed the QR code they'll scan using
 Google Authenticator. Once they do that, everything should be good to go.&lt;/p&gt;
+&lt;h2&gt;CloudWatch Logs Agent&lt;/h2&gt;
+&lt;p&gt;Next let's configure the &lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;CloudWatch Logs Agent&lt;/a&gt;
+so that the OpenVPN Server logs are centralized and easy to query if necessary, and also protected from any
+attackers that might gain access to the server.&lt;/p&gt;
+&lt;p&gt;Firsly, a minor adjustment is needed to allow the agent installation to go properly. The provided AWS
+installation script checks &lt;code&gt;/etc/issue&lt;/code&gt; to determine which Linux distribution the machine uses. And OpenVPN
+Access Server has a custom string in that file. So we'll need to edit it to make sure the first line starts 
+with &lt;code&gt;Ubuntu&lt;/code&gt; or else the script will refuse to run.&lt;/p&gt;
+&lt;p&gt;I also recommend assigning the machine its proper hostname by issuing the following command as &lt;code&gt;root&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;hostname openvpn.example.com
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, make sure you edit &lt;code&gt;/etc/hostname&lt;/code&gt; and &lt;code&gt;/etc/hosts&lt;/code&gt; to make sure they also match the the full hostname.&lt;/p&gt;
+&lt;p&gt;Finally, you can then execute the 
+&lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;official AWS installation instructions&lt;/a&gt;
+with the following three recommendations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Make sure you include &lt;code&gt;/var/log/openvpnas.log&lt;/code&gt;, &lt;code&gt;/var/log/syslog&lt;/code&gt; and &lt;code&gt;/var/log/auth.log&lt;/code&gt; to the log
+collection.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When asked what the log stream name should be, I recommend you use the newly-configured machine name
+for clarity.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When asked about the timestamp format, choose to use a custom format and enter &lt;code&gt;%Y-%m-%dT%H:%M:%S%z&lt;/code&gt;.
+Go ISO 8601 or go home.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Finally, you'll need to enable the service to run via systemd (as &lt;code&gt;root&lt;/code&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; awslogs
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You should now see the new log groups on the AWS Console.&lt;/p&gt;
+&lt;p&gt;I would also like to suggest that you create a new file &lt;code&gt;/etc/logrotate.d/openvpnas&lt;/code&gt; with the following
+content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/var/log/apt/openvpnas.log {
+  rotate 90
+  daily
+  compress
+  missingok
+  notifempty
+}
+&lt;/pre&gt;&lt;/div&gt;
+
+
 &lt;h2&gt;Additional Recommendations&lt;/h2&gt;
 &lt;p&gt;A few security-minded tips that I would recommend you implement:&lt;/p&gt;
 &lt;ul&gt;
@@ -200,9 +249,5 @@ for both the web server and OpenVPN server, as per
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Configure the &lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;CloudWatch Logs Agent&lt;/a&gt;
-so that the OpenVPN Server logs are centralized and easy to query if necessary.&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;</content><category term="AWS"></category></entry></feed>
