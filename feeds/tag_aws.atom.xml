@@ -183,7 +183,7 @@ Google Authenticator. Once they do that, everything should be good to go.&lt;/p&
 &lt;p&gt;Next let's configure the &lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;CloudWatch Logs Agent&lt;/a&gt;
 so that the OpenVPN Server logs are centralized and easy to query if necessary, and also protected from any
 attackers that might gain access to the server.&lt;/p&gt;
-&lt;p&gt;Firsly, a minor adjustment is needed to allow the agent installation to go properly. The provided AWS
+&lt;p&gt;Firstly, a minor adjustment is needed to allow the agent installation to go properly. The provided AWS
 installation script checks &lt;code&gt;/etc/issue&lt;/code&gt; to determine which Linux distribution the machine uses. And OpenVPN
 Access Server has a custom string in that file. So we'll need to edit it to make sure the first line starts 
 with &lt;code&gt;Ubuntu&lt;/code&gt; or else the script will refuse to run.&lt;/p&gt;
