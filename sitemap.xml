@@ -5,35 +5,35 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/</loc>
-<lastmod>2017-03-30T18:05:20-00:00</lastmod>
+<lastmod>2017-03-30T18:06:13-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/archives.html</loc>
-<lastmod>2017-03-30T18:05:20-00:00</lastmod>
+<lastmod>2017-03-30T18:06:13-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/tags.html</loc>
-<lastmod>2017-03-30T18:05:20-00:00</lastmod>
+<lastmod>2017-03-30T18:06:13-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/categories.html</loc>
-<lastmod>2017-03-30T18:05:20-00:00</lastmod>
+<lastmod>2017-03-30T18:06:13-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/connecting-aws-vpcs-with-strongswan.html</loc>
-<lastmod>2017-03-16T09:10:00-03:00</lastmod>
+<lastmod>2017-03-30T18:06:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -96,7 +96,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/category/tools.html</loc>
-<lastmod>2017-03-16T09:10:00-03:06</lastmod>
+<lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -124,14 +124,14 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/tag/linux.html</loc>
-<lastmod>2017-03-16T09:10:00-03:06</lastmod>
+<lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/tag/aws.html</loc>
-<lastmod>2017-03-16T09:10:00-03:06</lastmod>
+<lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -152,7 +152,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/tag/strongswan.html</loc>
-<lastmod>2017-03-16T09:10:00-03:06</lastmod>
+<lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -173,7 +173,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/author/alexandre-sieira.html</loc>
-<lastmod>2017-03-16T09:10:00-03:06</lastmod>
+<lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
