@@ -11,9 +11,15 @@ your &lt;a href="https://aws.amazon.com/answers/networking/aws-multiple-region-m
 full mesh connectivity between VPCs using IPsec site-to-site tunnels. And the &lt;em&gt;inexpensive&lt;/em&gt; part 
 is taken care of by using &lt;a href="http://www.stronswan.org"&gt;StrongSwan&lt;/a&gt; 5.4.0 on 
 &lt;a href="https://www.centos.org"&gt;CentOS&lt;/a&gt; 7 to implement this.&lt;/p&gt;
-&lt;p&gt;Basically the scenario here is that I want to connect two VPCs on different regions:
-&lt;em&gt; us-east-1 VPC with IP addresses in 172.16.0.0/16;
-&lt;/em&gt; us-east-2 VPC with IP addresses in 172.31.0.0/16.&lt;/p&gt;
+&lt;p&gt;Basically the scenario here is that I want to connect two VPCs on different regions:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;us-east-1 VPC with IP addresses in 172.16.0.0/16;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;us-east-2 VPC with IP addresses in 172.31.0.0/16.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
 &lt;p&gt;It is a simple exercise to extrapolate this configuration to have additional VPCs connected
 to these two via full mesh, so I won't get into the specifics of this here. Consider that
 as homework.&lt;/p&gt;
