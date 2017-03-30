@@ -205,7 +205,7 @@ openssl rsa -in us-east-1.key -pubout &amp;gt; ../certs/us-east-1.pub
 
 
 &lt;p&gt;Once you do that, you need to edit &lt;code&gt;/etc/strongswan/ipsec.secrets&lt;/code&gt; to let StrongSwan know what to
-use the private key. Add a line to that file that associates each instance's own elastic IP address
+do with the private key. Add a line to that file that associates each instance's own elastic IP address
 to the key file. Assuming the elastic IP address of the us-east-1 StrongSwan instance is &lt;code&gt;1.2.3.4&lt;/code&gt;,
 this is what that line would look like:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4 : RSA us-east-1.key

@@ -35,7 +35,7 @@ server <span class="m">3</span>.amazon.pool.ntp.org iburst
 openssl genrsa -out us-east-1.key <span class="m">4096</span>
 chmod og-r us-east-1.key
 openssl rsa -in us-east-1.key -pubout &gt; ../certs/us-east-1.pub
-</pre></div><p>Once you do that, you need to edit <code>/etc/strongswan/ipsec.secrets</code> to let StrongSwan know what to use the private key. Add a line to that file that associates each instance's own elastic IP address to the key file. Assuming the elastic IP address of the us-east-1 StrongSwan instance is <code>1.2.3.4</code>, this is what that line would look like:</p><div class="highlight"><pre><span></span><span class="m">1</span>.2.3.4 : RSA us-east-1.key
+</pre></div><p>Once you do that, you need to edit <code>/etc/strongswan/ipsec.secrets</code> to let StrongSwan know what to do with the private key. Add a line to that file that associates each instance's own elastic IP address to the key file. Assuming the elastic IP address of the us-east-1 StrongSwan instance is <code>1.2.3.4</code>, this is what that line would look like:</p><div class="highlight"><pre><span></span><span class="m">1</span>.2.3.4 : RSA us-east-1.key
 </pre></div><p>Then, you copy each StrongSwan instance's <code>.pub</code> file to the <code>/etc/strongswan/ipsec.d/certs</code> directory of each of the other StrongSwan instances. In our example, if you were on the us-east-1 instance you would see something like this:</p><div class="highlight"><pre><span></span>$ find /etc/strongswan/ipsec.d/ -name *.key
 /etc/strongswan/ipsec.d/private/us-east-1.key
 $ find /etc/strongswan/ipsec.d/ -name *.pub
