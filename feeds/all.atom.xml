@@ -1,5 +1,345 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/all.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2017-03-16T09:10:00-03:00</updated><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://asieira.github.io/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/all.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2017-03-16T09:10:00-03:00</updated><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://asieira.github.io/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2017-03-16:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget.&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
+I covered how to allow client-to-site connectivity to an AWS 
+&lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPC&lt;/a&gt; environment.&lt;/p&gt;
+&lt;p&gt;On this post I decided to continue exploring AWS VPC connectivity and talk about how to
+connect VPCs. If you have VPCs on the same region, you could simply use
+&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-peering.html"&gt;VPC peering&lt;/a&gt; and
+be done with it. But if your VPCs are located in different regions, you'll need to explore
+your &lt;a href="https://aws.amazon.com/answers/networking/aws-multiple-region-multi-vpc-connectivity/"&gt;options&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;I decided to test and document one of the more inexpensive and simple options I could think of, 
+full mesh connectivity between VPCs using IPsec site-to-site tunnels. And the &lt;em&gt;inexpensive&lt;/em&gt; part 
+is taken care of by using &lt;a href="http://www.stronswan.org"&gt;StrongSwan&lt;/a&gt; 5.4.0 on 
+&lt;a href="https://www.centos.org"&gt;CentOS&lt;/a&gt; 7 to implement this.&lt;/p&gt;
+&lt;p&gt;Basically the scenario here is that I want to connect two VPCs on different regions:
+&lt;em&gt; us-east-1 VPC with IP addresses in 172.16.0.0/16;
+&lt;/em&gt; us-east-2 VPC with IP addresses in 172.31.0.0/16.&lt;/p&gt;
+&lt;p&gt;It is a simple exercise to extrapolate this configuration to have additional VPCs connected
+to these two via full mesh, so I won't get into the specifics of this here. Consider that
+as homework.&lt;/p&gt;
+&lt;h2&gt;IP Addresses and Security Groups&lt;/h2&gt;
+&lt;p&gt;First, create one &lt;a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-ip-addresses-eip.html"&gt;Elastic IP Address&lt;/a&gt; 
+for each StrongSwan instance. Optionally, create a hostname for each in Route53 if you
+think that will help you later on.&lt;/p&gt;
+&lt;p&gt;Then, create one 
+&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html"&gt;security group&lt;/a&gt;
+for each of the StrongSwan instances. Leave all outbound traffic as allowed, and create the 
+following inbound rules:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Create an SSH rule to allow you to log into the box later on;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Allow &lt;code&gt;All traffic&lt;/code&gt; from all of the VPC IP address ranges. In our example, this means 
+allowing all traffic from 172.16.0.0/16 and 172.31.0.0/16 on the security group. This is 
+necessary because when an instance acts a router, you can't differentiate traffic directed
+to its own IP address or to one of the remote networks it can route to on the security group.
+Any such differentiation will unfortunately need to be implemented internally in 
+&lt;a href="https://wiki.centos.org/HowTos/Network/IPTables"&gt;iptables&lt;/a&gt;;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;For each of the other elastic IP addresses of StrongSwan instances it will need to 
+connect to, create the following rules:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Type&lt;/th&gt;
+&lt;th&gt;Protocol&lt;/th&gt;
+&lt;th&gt;Port Range&lt;/th&gt;
+&lt;th&gt;Source&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom ICMP Rule - IPv4&lt;/td&gt;
+&lt;td&gt;Time Exceeded&lt;/td&gt;
+&lt;td&gt;All&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom ICMP Rule - IPv4&lt;/td&gt;
+&lt;td&gt;Destination Unreachable&lt;/td&gt;
+&lt;td&gt;All&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom ICMP Rule - IPv4&lt;/td&gt;
+&lt;td&gt;Echo Reply&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom ICMP Rule - IPv4&lt;/td&gt;
+&lt;td&gt;Echo Request&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom ICMP Rule - IPv4&lt;/td&gt;
+&lt;td&gt;Traceroute&lt;/td&gt;
+&lt;td&gt;N/A&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom Protocol&lt;/td&gt;
+&lt;td&gt;AH (51)&lt;/td&gt;
+&lt;td&gt;All&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom UDP Rule&lt;/td&gt;
+&lt;td&gt;UDP&lt;/td&gt;
+&lt;td&gt;4500&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Custom UDP Rule&lt;/td&gt;
+&lt;td&gt;UDP&lt;/td&gt;
+&lt;td&gt;500&lt;/td&gt;
+&lt;td&gt;&lt;em&gt;elastic IP&lt;/em&gt;/32&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The ICMP rules above serve two purposes. Firstly, the traceroute and echo reply/request ones will 
+make it easier for you to troubleshoot the connectivity between the StrongSwan instances. Most 
+importantly, though, the time exceeded and destination unreachable entries are there to allow 
+&lt;a href="https://en.wikipedia.org/wiki/Path_MTU_Discovery"&gt;path MTU discovery&lt;/a&gt; to happen properly between
+StrongSwan instances communicating over the Internet.&lt;/p&gt;
+&lt;p&gt;Next, update all of existing security groups in each VPC to ensure these same ICMP messages are 
+accepted from all VPCs IP address ranges (172.16.0.0/16 and 172.31.0.0/16 in our example). The 
+objective here is similar: to allow troubleshooting and proper path MTU discovery to happen on 
+the end-to-end communications between machines on different VPCs through the VPN.&lt;/p&gt;
+&lt;h2&gt;Create StrongSwan Instances and Configure Linux&lt;/h2&gt;
+&lt;p&gt;This is what you need to keep in mind when creating the instances:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Pick the instance type you'll need. Something on the &lt;a href="https://aws.amazon.com/ec2/instance-types/#c4"&gt;c4 family&lt;/a&gt;
+ for more heavy-duty traffic volumes, or something on the &lt;a href="https://aws.amazon.com/ec2/instance-types/#t2"&gt;t2&lt;/a&gt; 
+ family should be more than enough for sporadic management / admin traffic;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use the latest &lt;a href="https://aws.amazon.com/marketplace/pp/B00O7WM7QW/"&gt;CentOS 7 AMI&lt;/a&gt; to create a
+ new instance on a public subnet of the chosen region with the security group we recently created;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-eips.html#WorkWithEIPs"&gt;Associate&lt;/a&gt; 
+ the elastic IP address to the instance;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html#EIP_Disable_SrcDestCheck"&gt;Disable the source/destination check&lt;/a&gt;
+ on the instance since it will act as a router.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Then, SSH into the machine (keep in mind the default username for the AMI is &lt;code&gt;centos&lt;/code&gt;) so
+ we can configure the operating system properly. Make sure you become root for the following
+ configuration steps.&lt;/p&gt;
+&lt;p&gt;Ensure that &lt;code&gt;/etc/sysctl.conf&lt;/code&gt; contains the following lines and then force them to be loaded by
+running &lt;code&gt;sysctl -p /etc/sysctl.conf&lt;/code&gt; or by rebooting:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;net.ipv4.ip_forward &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.conf.all.send_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.conf.default.send_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.tcp_max_syn_backlog &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1280&lt;/span&gt;
+net.ipv4.icmp_echo_ignore_broadcasts &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.conf.all.accept_source_route &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.conf.all.accept_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.conf.all.secure_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.conf.all.log_martians &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.conf.default.accept_source_route &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.conf.default.accept_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.conf.default.secure_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
+net.ipv4.icmp_echo_ignore_broadcasts &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.icmp_ignore_bogus_error_responses &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.tcp_syncookies &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.conf.all.rp_filter &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.conf.default.rp_filter &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Let's make sure the machine is fully patched, that we can use EPEL and that we install StrongSwan
+by issuing the following commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install epel-release
+yum repolist
+yum update
+yum install strongswan
+systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; strongswan
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;In order to ensure the cryptography and logging work properly, the system needs to have proper time
+synchronization. Make sure &lt;a href="https://en.wikipedia.org/wiki/Network_Time_Protocol"&gt;NTP&lt;/a&gt; is installed and 
+configured to run on system start:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install ntp
+systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; ntpd
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Replace the &lt;code&gt;server&lt;/code&gt; configuration entries in &lt;code&gt;/etc/ntp.conf&lt;/code&gt; so the AWS recommended NTP 
+server pool is used:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;server &lt;span class="m"&gt;0&lt;/span&gt;.amazon.pool.ntp.org iburst
+server &lt;span class="m"&gt;1&lt;/span&gt;.amazon.pool.ntp.org iburst
+server &lt;span class="m"&gt;2&lt;/span&gt;.amazon.pool.ntp.org iburst
+server &lt;span class="m"&gt;3&lt;/span&gt;.amazon.pool.ntp.org iburst
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Finally, restart the NTP service with &lt;code&gt;systemctl restart ntpd&lt;/code&gt; and check that it is working properly 
+with &lt;code&gt;ntpq -p&lt;/code&gt;.&lt;/p&gt;
+&lt;h2&gt;Configuring StrongSwan&lt;/h2&gt;
+&lt;p&gt;We'll configure StrongSwan to use RSA keys for authentication, so the first step is to create
+those keys and associate them with the servers in the StrongSwan configuration.&lt;/p&gt;
+&lt;p&gt;On each StrongSwan instance, create its own RSA key. This is how you would do it on the us-east-1
+StrongSwan instance:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /etc/strongswan/ipsec.d/private/
+openssl genrsa -out us-east-1.key &lt;span class="m"&gt;4096&lt;/span&gt;
+chmod og-r us-east-1.key
+openssl rsa -in us-east-1.key -pubout &amp;gt; ../certs/us-east-1.pub
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Once you do that, you need to edit &lt;code&gt;/etc/strongswan/ipsec.secrets&lt;/code&gt; to let StrongSwan know what to
+use the private key. Add a line to that file that associates each instance's own elastic IP address
+to the key file. Assuming the elastic IP address of the us-east-1 StrongSwan instance is &lt;code&gt;1.2.3.4&lt;/code&gt;,
+this is what that line would look like:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4 : RSA us-east-1.key
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, you copy each StrongSwan instance's &lt;code&gt;.pub&lt;/code&gt; file to the &lt;code&gt;/etc/strongswan/ipsec.d/certs&lt;/code&gt; 
+directory of each of the other StrongSwan instances. In our example, if you were on the us-east-1 
+instance you would see something like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ find /etc/strongswan/ipsec.d/ -name *.key
+/etc/strongswan/ipsec.d/private/us-east-1.key
+$ find /etc/strongswan/ipsec.d/ -name *.pub
+/etc/strongswan/ipsec.d/certs/us-east-1.pub
+/etc/strongswan/ipsec.d/certs/us-east-2.pub
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Finally, you configure &lt;code&gt;/etc/strongswan/ipsec.conf&lt;/code&gt; to tie it all together. This is what the
+configuration file would look like the the elastic IP for the us-east-1 and us-east-2 instances
+were 1.2.3.4 and 2.3.4.5, respectively:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config setup
+    &lt;span class="c1"&gt;# strictcrlpolicy=yes&lt;/span&gt;
+    &lt;span class="c1"&gt;# uniqueids = no&lt;/span&gt;
+
+conn %default
+    &lt;span class="nv"&gt;fragmentation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes
+    &lt;span class="nv"&gt;dpdaction&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;restart
+    &lt;span class="nv"&gt;ike&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;aes192gcm16-aes128gcm16-aes192-prfsha256-ecp256-ecp521,aes192-sha256-modp3072
+    &lt;span class="nv"&gt;esp&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;aes192gcm16-aes128gcm16-aes192-ecp256,aes192-sha256-modp3072#
+    &lt;span class="nv"&gt;keyingtries&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;%forever
+    &lt;span class="nv"&gt;keyexchange&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;ikev2
+    &lt;span class="nv"&gt;authby&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;rsasig
+    &lt;span class="nv"&gt;forceencaps&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes
+    &lt;span class="nv"&gt;leftid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4
+    &lt;span class="nv"&gt;leftrsasigkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;us-east-1.pub
+    &lt;span class="nv"&gt;leftsubnet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;172&lt;/span&gt;.16.0.0/16
+
+&lt;span class="c1"&gt;# Add connections here.&lt;/span&gt;
+conn us-east-2
+    &lt;span class="nv"&gt;right&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;.3.4.5
+    &lt;span class="nv"&gt;rightsubnet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;172&lt;/span&gt;.31.0.0/16
+    &lt;span class="nv"&gt;rightrsasigkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;us-east-2.pub
+    &lt;span class="nv"&gt;auto&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;start
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Keep in mind that &lt;code&gt;left&lt;/code&gt; in StrongSwan parlance means the side of the VPN that is local to 
+the instance you are configuring, and &lt;code&gt;right&lt;/code&gt; is the remote side. So the configuration file on
+the us-east-2 instance would look like this:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config setup
+    &lt;span class="c1"&gt;# strictcrlpolicy=yes&lt;/span&gt;
+    &lt;span class="c1"&gt;# uniqueids = no&lt;/span&gt;
+
+conn %default
+    &lt;span class="nv"&gt;fragmentation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes
+    &lt;span class="nv"&gt;dpdaction&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;restart
+    &lt;span class="nv"&gt;ike&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;aes192gcm16-aes128gcm16-aes192-prfsha256-ecp256-ecp521,aes192-sha256-modp3072
+    &lt;span class="nv"&gt;esp&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;aes192gcm16-aes128gcm16-aes192-ecp256,aes192-sha256-modp3072#
+    &lt;span class="nv"&gt;keyingtries&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;%forever
+    &lt;span class="nv"&gt;keyexchange&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;ikev2
+    &lt;span class="nv"&gt;authby&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;rsasig
+    &lt;span class="nv"&gt;forceencaps&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes
+    &lt;span class="nv"&gt;leftid&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;2&lt;/span&gt;.3.4.5
+    &lt;span class="nv"&gt;leftrsasigkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;us-east-2.pub
+    &lt;span class="nv"&gt;leftsubnet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;172&lt;/span&gt;.31.0.0/16
+
+&lt;span class="c1"&gt;# Add connections here.&lt;/span&gt;
+conn us-east-1
+    &lt;span class="nv"&gt;right&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4
+    &lt;span class="nv"&gt;rightsubnet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;172&lt;/span&gt;.16.0.0/16
+    &lt;span class="nv"&gt;rightrsasigkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;us-east-1.pub
+    &lt;span class="nv"&gt;auto&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;start
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Please review the StrongSwan 
+&lt;a href="https://wiki.strongswan.org/projects/strongswan/wiki/IpsecConf"&gt;documentation on ipsec.conf&lt;/a&gt; to
+better understand some of the choices I've made there, and tweak the setup to meet your needs.
+I wouldn't change the configuration on the &lt;code&gt;fragmentation&lt;/code&gt; and &lt;code&gt;forceencaps&lt;/code&gt; options, though, 
+since I had problems if they were not set as above.&lt;/p&gt;
+&lt;p&gt;Once you've set all of this up, run &lt;code&gt;systemctl restart strongswan&lt;/code&gt; and monitor the logs with
+&lt;code&gt;tail -f /var/log/messages | grep charon&lt;/code&gt; for log entries related to the IPsec tunnel 
+negotiations and authentication.&lt;/p&gt;
+&lt;p&gt;Hopefully by now you will be able to ping us-east-2's StrongSwan instance internal (172.31.0.x) 
+IP address from the SSH session on us-east-1's StrongSwan instance.&lt;/p&gt;
+&lt;h2&gt;Routing&lt;/h2&gt;
+&lt;p&gt;Finally, in order to allow machines on one region to talk to machines and services on the other,
+we'll need to update the 
+&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html"&gt;route tables&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;What you need to do is to 
+&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html#AddRemoveRoutes"&gt;add a new route&lt;/a&gt;
+that tells machines on a region that in order to talk to the addresses on the other regions, they 
+must go through the StrongSwan instance. &lt;/p&gt;
+&lt;p&gt;So in our example, you should add a new route to all routing tables in us-east-1 that has a &lt;code&gt;Destination&lt;/code&gt;
+of 172.31.0.0/16, and a &lt;code&gt;Target&lt;/code&gt; that is the instance ID of the us-east-1 StrongSwan instance.&lt;/p&gt;
+&lt;p&gt;Conversely, you should add a new route to all routing tables in us-east-2 that has a &lt;code&gt;Destination&lt;/code&gt; of
+172.16.0.0/16, and a &lt;code&gt;Target&lt;/code&gt; that is the instance ID of the us-east-2 StrongSwan instance.&lt;/p&gt;
+&lt;p&gt;Finally, make sure that the security groups of services that need to be accessed across the VPN
+will now allow the IP addresses of the remote machines in. Once you do that, you can then test the
+communication between regions successfully. Of course, if you enabled ICMP as recommended above,
+you should be able to ping any instance in us-east-2 from any instance in us-east-1 and vice-versa
+by now.&lt;/p&gt;
+&lt;h2&gt;Availability Concerns&lt;/h2&gt;
+&lt;p&gt;You could achieve some level of redundancy and distribution of load by increasing the number
+of VPN concentrator instances you stand up. &lt;/p&gt;
+&lt;p&gt;One idea would be to create one VPN concentrator per availability zone instead of just one per
+region. In this scenario even if one availability zone (or its StrongSwan instance) become
+unavailable, the rest of the availability zones will remain connected.&lt;/p&gt;
+&lt;p&gt;This is a high level guide of what that would entail in addition to what was discussed
+above:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create the additional StrongSwan instances as per the instructions above;&lt;/li&gt;
+&lt;li&gt;Separate the routing tables per availability zone and assign each one to its corresponding 
+subnets;&lt;/li&gt;
+&lt;li&gt;Update &lt;code&gt;ipsec.conf&lt;/code&gt; on all machines to have one connection for each VPN concentrator. Also
+update each one's &lt;code&gt;leftsubnet&lt;/code&gt; and &lt;code&gt;rightsubnet&lt;/code&gt; definitions so that each server is only 
+responsible for the IP address ranges of the subnets in its availability zone.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;I have not covered implementing HA on StrongSwan, though apparently that is 
+&lt;a href="https://wiki.strongswan.org/projects/strongswan/wiki/HighAvailability"&gt;supported&lt;/a&gt; as well.
+If you get this working let me know.&lt;/p&gt;
+&lt;h2&gt;Additional Recommendations&lt;/h2&gt;
+&lt;p&gt;A few security-minded tips that I would recommend you implement:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Ensure you close off SSH access to the StrongSwan instances after you're done configuring them, 
+by removing the applicable Security Group inbound rule. You can always allow it temporarily again 
+on the Security Group if and when you need it.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Install the
+&lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;CloudWatch Logs Agent&lt;/a&gt;
+on the machine, remember we covered this already 
+&lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;here&lt;/a&gt;. Make sure you collect at least the
+following files: &lt;code&gt;/var/log/messages&lt;/code&gt;, &lt;code&gt;/var/log/secure&lt;/code&gt; and &lt;code&gt;/var/log/audit/audit.log&lt;/code&gt;. &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="StrongSwan"></category></entry><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://asieira.github.io/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
  &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPCs&lt;/a&gt; and keeping some non-public subnets for 
  resources you don't want to be accessible to the open Internet. &lt;/p&gt;
 &lt;p&gt;Usually when this is done, a 
@@ -255,7 +595,7 @@ for both the web server and OpenVPN server, as per
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="AWS"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
+&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
 function properly. But when you install a package in OS X you will probably get a pre-compiled version
 of said package from &lt;a href="https://cran.r-project.org/"&gt;CRAN&lt;/a&gt; that used their build environment and the
 default package options.&lt;/p&gt;

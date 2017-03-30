@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/</loc>
-<lastmod>2017-03-17T13:26:55-00:00</lastmod>
+<lastmod>2017-03-30T18:01:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/archives.html</loc>
-<lastmod>2017-03-17T13:26:55-00:00</lastmod>
+<lastmod>2017-03-30T18:01:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/tags.html</loc>
-<lastmod>2017-03-17T13:26:55-00:00</lastmod>
+<lastmod>2017-03-30T18:01:33-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/categories.html</loc>
-<lastmod>2017-03-17T13:26:55-00:00</lastmod>
+<lastmod>2017-03-30T18:01:33-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/connecting-aws-vpcs-with-strongswan.html</loc>
+<lastmod>2017-03-16T09:10:00-03:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -95,6 +102,20 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
+<loc>https://asieira.github.io/tag/threat-intelligence.html</loc>
+<lastmod>2016-02-13T02:03:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/tag/siem.html</loc>
+<lastmod>2016-02-02T17:40:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
 <loc>https://asieira.github.io/tag/python.html</loc>
 <lastmod>2016-06-13T19:17:00-03:06</lastmod>
 <changefreq>daily</changefreq>
@@ -102,8 +123,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/threat-intelligence.html</loc>
-<lastmod>2016-02-13T02:03:00-03:06</lastmod>
+<loc>https://asieira.github.io/tag/linux.html</loc>
+<lastmod>2017-03-16T09:10:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -130,8 +151,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/siem.html</loc>
-<lastmod>2016-02-02T17:40:00-03:06</lastmod>
+<loc>https://asieira.github.io/tag/strongswan.html</loc>
+<lastmod>2017-03-16T09:10:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -139,6 +160,13 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://asieira.github.io/tag/splunk.html</loc>
 <lastmod>2016-02-02T17:40:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://asieira.github.io/tag/openvpn.html</loc>
+<lastmod>2017-03-16T09:10:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
