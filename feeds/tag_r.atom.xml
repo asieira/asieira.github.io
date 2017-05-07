@@ -31,10 +31,8 @@ with OpenMP support. This is how you do it using homebrew:&lt;/p&gt;
 &lt;a href="http://stackoverflow.com/questions/30049486/what-does-gcc-without-multilib-mean"&gt;creates problems&lt;/a&gt; with
 OpenMP. Unless you're cross-compiling to different architectures you probably won't miss it anyway.&lt;/p&gt;
 &lt;p&gt;If you already had gcc installed with homebrew, just replace &lt;code&gt;install&lt;/code&gt; above with &lt;code&gt;reinstall&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;After you do that, you'll notice that a folder &lt;code&gt;/usr/local/Cellar/gcc/&amp;lt;version&amp;gt;&lt;/code&gt; was created. Under it,
-there will be a &lt;code&gt;bin&lt;/code&gt; directory with the executables for &lt;code&gt;gcc&lt;/code&gt;, &lt;code&gt;g++&lt;/code&gt; and &lt;code&gt;gfortran&lt;/code&gt;. Take note of the
-exact path and filenames.&lt;/p&gt;
-&lt;p&gt;Next, what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code&gt; to include the following:&lt;/p&gt;
+&lt;p&gt;After you do that, you'll notice that gcc executables should have been linked to &lt;code&gt;/usr/local/bin&lt;/code&gt;. Next, 
+what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code&gt; to reference them:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gcc-6
 &lt;span class="nv"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;CXX1X&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
