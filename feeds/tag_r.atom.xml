@@ -35,12 +35,12 @@ OpenMP. Unless you're cross-compiling to different architectures you probably wo
 there will be a &lt;code&gt;bin&lt;/code&gt; directory with the executables for &lt;code&gt;gcc&lt;/code&gt;, &lt;code&gt;g++&lt;/code&gt; and &lt;code&gt;gfortran&lt;/code&gt;. Take note of the
 exact path and filenames.&lt;/p&gt;
 &lt;p&gt;Next, what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code&gt; to include the following:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gcc-6
-&lt;span class="nv"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/g++-6
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gcc-6
+&lt;span class="nv"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;CXX1X&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
-&lt;span class="nv"&gt;SHLIB_CXXLD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/g++-6
-&lt;span class="nv"&gt;FC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gfortran-6
-&lt;span class="nv"&gt;F77&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/Cellar/gcc/6.1.0/bin/gfortran-6
+&lt;span class="nv"&gt;SHLIB_CXXLD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
+&lt;span class="nv"&gt;FC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gfortran-6
+&lt;span class="nv"&gt;F77&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gfortran-6
 &lt;span class="nv"&gt;MAKE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;make -j8
 
 &lt;span class="nv"&gt;SHLIB_OPENMP_CFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
@@ -50,8 +50,8 @@ exact path and filenames.&lt;/p&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;p&gt;Make sure you adjust the version directory and the major version on the executable file names to match
-what homebrew installed in the last step.&lt;/p&gt;
+&lt;p&gt;Make sure you adjust the major version on the executable file names to match what homebrew installed in 
+the last step.&lt;/p&gt;
 &lt;p&gt;After all this, uninstall the R packages you want to with OpenMP with, and 
 &lt;a href="http://stackoverflow.com/questions/1474081/how-do-i-install-an-r-package-from-source"&gt;reinstall them from source&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
