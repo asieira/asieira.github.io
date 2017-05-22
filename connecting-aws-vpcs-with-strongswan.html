@@ -20,7 +20,8 @@ net.ipv4.icmp_ignore_bogus_error_responses <span class="o">=</span> <span class=
 net.ipv4.tcp_syncookies <span class="o">=</span> <span class="m">1</span>
 net.ipv4.conf.all.rp_filter <span class="o">=</span> <span class="m">1</span>
 net.ipv4.conf.default.rp_filter <span class="o">=</span> <span class="m">1</span>
-</pre></div><p>Let's make sure the machine is fully patched, that we can use EPEL and that we install StrongSwan by issuing the following commands:</p><div class="highlight"><pre><span></span>yum install epel-release
+net.ipv4.tcp_mtu_probing <span class="o">=</span> <span class="m">1</span>
+</pre></div><p>As a side note, it is strongly recommended that you include <code>net.ipv4.tcp_mtu_probing = 1</code> on the <code>sysctl.conf</code> of all of your Linux EC2 instances, since they use jumbo frames by default.</p><p>Let's make sure the machine is fully patched, that we can use EPEL and that we install StrongSwan by issuing the following commands:</p><div class="highlight"><pre><span></span>yum install epel-release
 yum repolist
 yum update
 yum install strongswan
@@ -46,7 +47,7 @@ $ find /etc/strongswan/ipsec.d/ -name *.pub
     <span class="c1"># uniqueids = no</span>
 
 conn %default
-    <span class="nv">fragmentation</span><span class="o">=</span>yes
+    <span class="nv">fragmentation</span><span class="o">=</span>force
     <span class="nv">dpdaction</span><span class="o">=</span>restart
     <span class="nv">ike</span><span class="o">=</span>aes192gcm16-aes128gcm16-aes192-prfsha256-ecp256-ecp521,aes192-sha256-modp3072
     <span class="nv">esp</span><span class="o">=</span>aes192gcm16-aes128gcm16-aes192-ecp256,aes192-sha256-modp3072#

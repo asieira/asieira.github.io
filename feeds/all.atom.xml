@@ -160,9 +160,12 @@ net.ipv4.icmp_ignore_bogus_error_responses &lt;span class="o"&gt;=&lt;/span&gt; 
 net.ipv4.tcp_syncookies &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 net.ipv4.conf.all.rp_filter &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 net.ipv4.conf.default.rp_filter &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+net.ipv4.tcp_mtu_probing &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
+&lt;p&gt;As a side note, it is strongly recommended that you include &lt;code&gt;net.ipv4.tcp_mtu_probing = 1&lt;/code&gt; on the 
+&lt;code&gt;sysctl.conf&lt;/code&gt; of all of your Linux EC2 instances, since they use jumbo frames by default.&lt;/p&gt;
 &lt;p&gt;Let's make sure the machine is fully patched, that we can use EPEL and that we install StrongSwan
 by issuing the following commands:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install epel-release
@@ -231,7 +234,7 @@ were 1.2.3.4 and 2.3.4.5, respectively:&lt;/p&gt;
     &lt;span class="c1"&gt;# uniqueids = no&lt;/span&gt;
 
 conn %default
-    &lt;span class="nv"&gt;fragmentation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;yes
+    &lt;span class="nv"&gt;fragmentation&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;force
     &lt;span class="nv"&gt;dpdaction&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;restart
     &lt;span class="nv"&gt;ike&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;aes192gcm16-aes128gcm16-aes192-prfsha256-ecp256-ecp521,aes192-sha256-modp3072
     &lt;span class="nv"&gt;esp&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;aes192gcm16-aes128gcm16-aes192-ecp256,aes192-sha256-modp3072#
