@@ -505,7 +505,7 @@ chmod a+x /root/certbot-route53.sh
                 &lt;span class="s2"&gt;&amp;quot;route53:ListResourceRecordSets&amp;quot;&lt;/span&gt;
             &lt;span class="p"&gt;],&lt;/span&gt;
             &lt;span class="nt"&gt;&amp;quot;Resource&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;arn:aws:route53:::hostedzone/Z1QB64WU43T6IU&amp;quot;&lt;/span&gt;
+                &lt;span class="s2"&gt;&amp;quot;arn:aws:route53:::hostedzone/&amp;lt;your hosted zone ID&amp;gt;&amp;quot;&lt;/span&gt;
             &lt;span class="p"&gt;]&lt;/span&gt;
         &lt;span class="p"&gt;},&lt;/span&gt;
         &lt;span class="p"&gt;{&lt;/span&gt;
