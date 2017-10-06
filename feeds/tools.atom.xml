@@ -686,6 +686,7 @@ what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code
 &lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gcc-6
 &lt;span class="nv"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;CXX1X&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
+&lt;span class="nv"&gt;CXX11&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;SHLIB_CXXLD&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;FC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gfortran-6
 &lt;span class="nv"&gt;F77&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gfortran-6
