@@ -5,28 +5,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://asieira.github.io/</loc>
-<lastmod>2019-06-28T17:16:04-00:00</lastmod>
+<lastmod>2019-06-28T17:20:20-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/archives.html</loc>
-<lastmod>2019-06-28T17:16:04-00:00</lastmod>
+<lastmod>2019-06-28T17:20:20-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/tags.html</loc>
-<lastmod>2019-06-28T17:16:04-00:00</lastmod>
+<lastmod>2019-06-28T17:20:20-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://asieira.github.io/categories.html</loc>
-<lastmod>2019-06-28T17:16:04-00:00</lastmod>
+<lastmod>2019-06-28T17:20:20-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -69,13 +69,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://asieira.github.io/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</loc>
 <lastmod>2016-04-24T19:22:00-03:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://asieira.github.io/useful-references-for-securing-a-web-application.html</loc>
-<lastmod>2016-03-18T10:39:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -181,13 +174,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://asieira.github.io/tag/personal.html</loc>
 <lastmod>2016-04-24T19:22:00-03:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://asieira.github.io/tag/application-security.html</loc>
-<lastmod>2016-03-18T10:39:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
