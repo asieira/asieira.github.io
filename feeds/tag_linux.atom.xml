@@ -523,7 +523,7 @@ chmod a+x /root/certbot-route53.sh
 
 
 &lt;p&gt;Finally, create a regular task executed twice a day by running &lt;code&gt;crontab -e&lt;/code&gt; as &lt;code&gt;root&lt;/code&gt; and entering the following new entry:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;0 1,13 * * * /root/certbot-auto renew --pre-hook &amp;quot;/root/pre-hook.sh&amp;quot; --post-hook &amp;quot;/root/post-hook.sh&amp;quot; --manual-auth-hook &amp;quot;/root/certbot-route53.sh&amp;quot; --manual-cleanup-hook &amp;quot;/root/certbot-route53.sh&amp;quot; --quiet --manual-public-ip-logging-ok
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;certbot&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;auto&lt;/span&gt; &lt;span class="n"&gt;renew&lt;/span&gt; &lt;span class="c1"&gt;--pre-hook &amp;quot;/root/pre-hook.sh&amp;quot; --post-hook &amp;quot;/root/post-hook.sh&amp;quot; --manual-auth-hook &amp;quot;/root/certbot-route53.sh&amp;quot; --manual-cleanup-hook &amp;quot;/root/certbot-route53.sh&amp;quot; --quiet --manual-public-ip-logging-ok&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
@@ -617,13 +617,13 @@ restart the rsyslog service:&lt;/p&gt;
 &lt;p&gt;You should now see the new log groups on the AWS Console.&lt;/p&gt;
 &lt;p&gt;I would also like to suggest that you create a new file &lt;code&gt;/etc/logrotate.d/openvpnas&lt;/code&gt; with the following
 content:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/var/log/apt/openvpnas.log {
-  rotate 90
-  daily
-  compress
-  missingok
-  notifempty
-}
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;openvpnas&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="err"&gt;{&lt;/span&gt;
+  &lt;span class="n"&gt;rotate&lt;/span&gt; &lt;span class="mi"&gt;90&lt;/span&gt;
+  &lt;span class="n"&gt;daily&lt;/span&gt;
+  &lt;span class="n"&gt;compress&lt;/span&gt;
+  &lt;span class="n"&gt;missingok&lt;/span&gt;
+  &lt;span class="n"&gt;notifempty&lt;/span&gt;
+&lt;span class="err"&gt;}&lt;/span&gt;
 &lt;/pre&gt;&lt;/div&gt;
 
 
