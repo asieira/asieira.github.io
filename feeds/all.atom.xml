@@ -18,7 +18,7 @@
 &lt;h2&gt;Other Noteworthy Announcements&lt;/h2&gt;
 &lt;p&gt;Out of the other many new features and announcements, these were the ones that caught my attention:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;a href="https://aws.amazon.com/about-aws/whats-new/2019/06/aws-security-hub-now-generally-available/"&gt;Security Hub is now GA&lt;/a&gt;. Security Hub's main advantage is providing a single dashboard, event format and 3rd party integration point for your AWS security, including native services like Macie and Guard Duty. The main limitation at this point is that even though it has cross-account support, it is a per-region service. So large organizations will still have multiple "panes of glass". Hope to see AWS work on that in the future.&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://aws.amazon.com/about-aws/whats-new/2019/06/aws-security-hub-now-generally-available/"&gt;Security Hub is now GA&lt;/a&gt;. Security Hub's main advantage is providing a single dashboard, event format and 3rd party integration point for your AWS security, including native services like &lt;a href="https://aws.amazon.com/macie/"&gt;Macie&lt;/a&gt; and &lt;a href="https://aws.amazon.com/guardduty/"&gt;Guard Duty&lt;/a&gt;. The main limitation at this point is that even though it has cross-account support, it is a per-region service. So large organizations will still have multiple "panes of glass". Hope to see AWS work on that in the future.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;iframe width="560" height="315" src="https://www.youtube.com/embed/kD6JdUAKdV8" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen&gt;&lt;/iframe&gt;
 
@@ -33,7 +33,7 @@
 &lt;p&gt;Does not allow you to create your own service control policies or "guard rails" as they call them in Control Tower lingo;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
-&lt;p&gt;Does not allow you to customize provided guard rails ones except for per-account On/Off status;&lt;/p&gt;
+&lt;p&gt;Does not allow you to customize provided guard rails except for per-account On/Off status;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Does not have its own API, seems at this point to be basically a UI layer on top of existing services.&lt;/p&gt;
@@ -47,7 +47,7 @@
 &lt;li&gt;&lt;a href="https://aws.amazon.com/blogs/aws/new-opt-in-to-default-encryption-for-new-ebs-volumes/"&gt;Opt-in to Default Encryption for EBS Volumes&lt;/a&gt; which should make meeting compliance requirements by default a lot easier on larger organizations. Does not handle existing unencrypted EBS volumes, but then again it's simple enough to find those with &lt;a href="https://docs.aws.amazon.com/config/latest/developerguide/encrypted-volumes.html"&gt;Config&lt;/a&gt;. This is a per-region setting, but can be automated through API calls.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2&gt;Keynote Highlights&lt;/h2&gt;
-&lt;p&gt;During the &lt;a href="https://reinforce.awsevents.com/learn/keynote/"&gt;keynote&lt;/a&gt;, Stephen E. Schmidt (AWS VP and CISO) was the ranking executive and led the announcements. By the way don't miss out on the hilarious Corey Quinn's &lt;a href="https://twitter.com/QuinnyPig/status/1143504072621867009"&gt;live-tweet thread&lt;/a&gt;, and you can also take a look at non-threaded posts from &lt;a href="https://twitter.com/AlexandreSieira/status/1143514790733725700"&gt;me&lt;/a&gt; and &lt;a href="https://twitter.com/fsmontenegro/status/1143508566499909637"&gt;Fernando Montenegro&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;During the &lt;a href="https://reinforce.awsevents.com/learn/keynote/"&gt;keynote&lt;/a&gt;, Stephen E. Schmidt (AWS VP and CISO) was the ranking executive and led the announcements. By the way don't miss out on the hilarious Corey Quinn's &lt;a href="https://twitter.com/QuinnyPig/status/1143504072621867009"&gt;live-tweet thread&lt;/a&gt;, and you can also take a look at non-threaded posts from &lt;a href="https://twitter.com/fsmontenegro/status/1143508566499909637"&gt;Fernando Montenegro&lt;/a&gt; and  &lt;a href="https://twitter.com/AlexandreSieira/status/1143514790733725700"&gt;I&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;During the keynote two moments caught my attention. The first was when Schmidt jabbed Azure and other competitors for the &lt;a href="https://www.datacenterknowledge.com/microsoft/azure-outage-proves-hard-way-availability-zones-are-good-idea"&gt;comparatively bad track record on availability and regional redundancy&lt;/a&gt;:&lt;/p&gt;
 &lt;blockquote class="twitter-tweet" data-lang="pt"&gt;&lt;p lang="en" dir="ltr"&gt;AWS throwing shade at competitors on region vs. availability zones &lt;a href="https://twitter.com/hashtag/reInforce?src=hash&amp;amp;ref_src=twsrc%5Etfw"&gt;#reInforce&lt;/a&gt; &lt;a href="https://t.co/sg36GRjeXC"&gt;pic.twitter.com/sg36GRjeXC&lt;/a&gt;&lt;/p&gt;&amp;mdash; Alexandre Sieira (@AlexandreSieira) &lt;a href="https://twitter.com/AlexandreSieira/status/1143515510589546496?ref_src=twsrc%5Etfw"&gt;25 de junho de 2019&lt;/a&gt;&lt;/blockquote&gt;
 
