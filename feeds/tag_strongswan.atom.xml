@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - StrongSwan</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tag_strongswan.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2017-03-30T18:06:00-03:00</updated><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
-if (window.location.hostname == "asieira.github.io") {
-    window.location = "https://www.infoseczanshin.com" + window.location.pathname
-}
-&lt;/script&gt;
-
-&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - StrongSwan</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tag_strongswan.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2017-03-30T18:06:00-03:00</updated><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
 I covered how to allow client-to-site connectivity to an AWS 
 &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPC&lt;/a&gt; environment.&lt;/p&gt;
 &lt;p&gt;On this post I decided to continue exploring AWS VPC connectivity and talk about how to
