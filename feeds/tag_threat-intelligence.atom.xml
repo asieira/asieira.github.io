@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - threat intelligence</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tag_threat-intelligence.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2016-02-13T02:03:00-02:00</updated><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://www.infoseczanshin.com/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-13:/threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;A common misunderstanding that can lead to a lot of pain.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have recently participated in a 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - threat intelligence</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tag_threat-intelligence.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2016-02-13T02:03:00-02:00</updated><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://www.infoseczanshin.com/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-13:/threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;A common misunderstanding that can lead to a lot of pain.&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;I have recently participated in a 
 &lt;a href="https://www.blackhat.com/html/webcast/01212016-data-driven-threat-intelligence.html"&gt;Black Hat webcast&lt;/a&gt;
 with &lt;a href="https://www.twitter.com/bhaskar_vk"&gt;Bhaskar Karambelkar&lt;/a&gt;, which was sponsored by 
 &lt;a href="https://threatconnect.com/"&gt;ThreatConnect&lt;/a&gt;. This was related to the Black Hat 2015 session called 

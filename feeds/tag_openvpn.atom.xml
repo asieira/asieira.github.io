@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - OpenVPN</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tag_openvpn.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2017-03-16T09:10:00-03:00</updated><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - OpenVPN</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tag_openvpn.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2017-03-16T09:10:00-03:00</updated><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
  &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPCs&lt;/a&gt; and keeping some non-public subnets for 
  resources you don't want to be accessible to the open Internet. &lt;/p&gt;
 &lt;p&gt;Usually when this is done, a 

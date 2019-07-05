@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/all.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2019-06-30T12:18:00-03:00</updated><entry><title>Highlights from AWS re:Inforce 2019</title><link href="https://www.infoseczanshin.com/highlights-from-aws-reinforce-2019.html" rel="alternate"></link><published>2019-06-30T12:18:00-03:00</published><updated>2019-06-30T12:18:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2019-06-30:/highlights-from-aws-reinforce-2019.html</id><summary type="html">&lt;p&gt;A not at all impartial view of AWS' first security-only event&lt;/p&gt;</summary><content type="html">&lt;p&gt;This week I had the pleasure of attending the first ever edition of &lt;a href="https://reinforce.awsevents.com/"&gt;AWS re:Inforce&lt;/a&gt;. In this post I'll try to summarize my impressions of the event, plus include comments and references to the main points of attention and associated documentation and related session videos.&lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/all.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2019-06-30T12:18:00-03:00</updated><entry><title>Highlights from AWS re:Inforce 2019</title><link href="https://www.infoseczanshin.com/highlights-from-aws-reinforce-2019.html" rel="alternate"></link><published>2019-06-30T12:18:00-03:00</published><updated>2019-06-30T12:18:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2019-06-30:/highlights-from-aws-reinforce-2019.html</id><summary type="html">&lt;p&gt;A not at all impartial view of AWS' first security-only event&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;This week I had the pleasure of attending the first ever edition of &lt;a href="https://reinforce.awsevents.com/"&gt;AWS re:Inforce&lt;/a&gt;. In this post I'll try to summarize my impressions of the event, plus include comments and references to the main points of attention and associated documentation and related session videos.&lt;/p&gt;
 &lt;h2&gt;The Big News&lt;/h2&gt;
 &lt;p&gt;&lt;a href="https://aws.amazon.com/blogs/aws/new-vpc-traffic-mirroring/"&gt;VPC Traffic Mirroring&lt;/a&gt;, was, in my opinion, the most market-relevant announcement at the conference. &lt;/p&gt;
 &lt;p&gt;This holds the promise of allowing several security product categories to be first-class citizens in AWS for the first time. After all, AWS has full control into what integration points they allow for traditional security vendors. They are slowly adding integration points, from early days as firewalls using Marketplace AMIs to act as NAT instances to something more explicit like &lt;a href="https://aws.amazon.com/marketplace/solutions/security/waf-managed-rules"&gt;WAF Managed Rules&lt;/a&gt;. Though not explicitly associated with partners, this is still a big deal for many of them.&lt;/p&gt;
@@ -90,7 +96,13 @@
 &lt;p&gt;&lt;a href="https://medium.com/@ashishrajan/aws-re-inforce-boston-2019-aws-security-conference-recap-what-they-didnt-tell-you-on-stage-9b7ecc04ddfe"&gt;AWS Re:inforce Boston 2019— AWS Security Conference: Recap (What they didn’t tell you on stage)&lt;/a&gt; by &lt;a href="https://medium.com/@ashishrajan"&gt;Ashish Rajan&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Thank you to &lt;a href="https://twitter.com/dseverski"&gt;David Severski&lt;/a&gt; for helping review an early draft of this document and providing valuable feedback.&lt;/p&gt;</content><category term="aws"></category><category term="cloud"></category><category term="event"></category><category term="reInforce"></category></entry><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
+&lt;p&gt;Thank you to &lt;a href="https://twitter.com/dseverski"&gt;David Severski&lt;/a&gt; for helping review an early draft of this document and providing valuable feedback.&lt;/p&gt;</content><category term="aws"></category><category term="cloud"></category><category term="event"></category><category term="reInforce"></category></entry><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
 I covered how to allow client-to-site connectivity to an AWS 
 &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPC&lt;/a&gt; environment.&lt;/p&gt;
 &lt;p&gt;On this post I decided to continue exploring AWS VPC connectivity and talk about how to
@@ -439,7 +451,13 @@ following files: &lt;code&gt;/var/log/messages&lt;/code&gt;, &lt;code&gt;/var/lo
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="StrongSwan"></category></entry><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
+&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="StrongSwan"></category></entry><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
  &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPCs&lt;/a&gt; and keeping some non-public subnets for 
  resources you don't want to be accessible to the open Internet. &lt;/p&gt;
 &lt;p&gt;Usually when this is done, a 
@@ -740,7 +758,13 @@ for both the web server and OpenVPN server, as per
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://www.infoseczanshin.com/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
+&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://www.infoseczanshin.com/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
 function properly. But when you install a package in OS X you will probably get a pre-compiled version
 of said package from &lt;a href="https://cran.r-project.org/"&gt;CRAN&lt;/a&gt; that used their build environment and the
 default package options.&lt;/p&gt;
@@ -794,7 +818,13 @@ what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code
 the last step.&lt;/p&gt;
 &lt;p&gt;After all this, uninstall the R packages you want to with OpenMP with, and 
 &lt;a href="http://stackoverflow.com/questions/1474081/how-do-i-install-an-r-package-from-source"&gt;reinstall them from source&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://www.infoseczanshin.com/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
+&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://www.infoseczanshin.com/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
 in Linux and Mac OS X environments. When I first found out about it, the idea of using JSON as a way to
 serialize and deserialize values between Python and R was beautifully simple and intuitive.&lt;/p&gt;
 &lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
@@ -923,7 +953,7 @@ will be much appreciated.&lt;/p&gt;
 &lt;p&gt;Many thanks to &lt;a href="https://twitter.com/hrbrmstr"&gt;Bob Rudis&lt;/a&gt; for his invaluable help in getting this 
 project going. &lt;/p&gt;</content><category term="R"></category><category term="Python"></category></entry><entry><title>In Memoriam: Lucas Eustaquio Gomes da Silva (August 27th 1982 - April 24th, 2016)</title><link href="https://www.infoseczanshin.com/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html" rel="alternate"></link><published>2016-04-24T19:22:00-03:00</published><updated>2016-04-24T19:22:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-04-24:/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</id><summary type="html">&lt;p&gt;Celebrating the life and achievements of an outstanding man.&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
 if (window.location.hostname == "asieira.github.io") {
-    window.location.hostname = "www.infoseczanshin.com"
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
 }
 &lt;/script&gt;
 
@@ -941,7 +971,13 @@ world loses an amazing human being, and one of its
 which was respected and cherished by his 
 &lt;a href="https://www.kaggle.com/forums/f/15/kaggle-forum/t/20388/data-scientist-hero"&gt;colleagues and peers&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Rest in peace, Lucas. You will be missed. We will do our best to ensure your work lives on - that the dream
-you shared with us will be realized, whatever the odds.&lt;/p&gt;</content><category term="personal"></category></entry><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://www.infoseczanshin.com/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-13:/threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;A common misunderstanding that can lead to a lot of pain.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have recently participated in a 
+you shared with us will be realized, whatever the odds.&lt;/p&gt;</content><category term="personal"></category></entry><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://www.infoseczanshin.com/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-13:/threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;A common misunderstanding that can lead to a lot of pain.&lt;/p&gt;</summary><content type="html">&lt;script language="javascript"&gt;
+if (window.location.hostname == "asieira.github.io") {
+    window.location = "https://www.infoseczanshin.com" + window.location.pathname
+}
+&lt;/script&gt;
+
+&lt;p&gt;I have recently participated in a 
 &lt;a href="https://www.blackhat.com/html/webcast/01212016-data-driven-threat-intelligence.html"&gt;Black Hat webcast&lt;/a&gt;
 with &lt;a href="https://www.twitter.com/bhaskar_vk"&gt;Bhaskar Karambelkar&lt;/a&gt;, which was sponsored by 
 &lt;a href="https://threatconnect.com/"&gt;ThreatConnect&lt;/a&gt;. This was related to the Black Hat 2015 session called 
