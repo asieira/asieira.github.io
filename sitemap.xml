@@ -4,203 +4,203 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitem
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>https://asieira.github.io/</loc>
-<lastmod>2019-07-01T10:07:03-00:00</lastmod>
+<loc>https://www.infoseczanshin.com/</loc>
+<lastmod>2019-07-05T11:46:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/archives.html</loc>
-<lastmod>2019-07-01T10:07:03-00:00</lastmod>
+<loc>https://www.infoseczanshin.com/archives.html</loc>
+<lastmod>2019-07-05T11:46:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tags.html</loc>
-<lastmod>2019-07-01T10:07:03-00:00</lastmod>
+<loc>https://www.infoseczanshin.com/tags.html</loc>
+<lastmod>2019-07-05T11:46:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/categories.html</loc>
-<lastmod>2019-07-01T10:07:03-00:00</lastmod>
+<loc>https://www.infoseczanshin.com/categories.html</loc>
+<lastmod>2019-07-05T11:46:40-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/highlights-from-aws-reinforce-2019.html</loc>
+<loc>https://www.infoseczanshin.com/highlights-from-aws-reinforce-2019.html</loc>
 <lastmod>2019-06-30T12:18:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/connecting-aws-vpcs-with-strongswan.html</loc>
+<loc>https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html</loc>
 <lastmod>2017-03-30T18:06:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/using-openvpn-access-server-to-access-aws-vpcs.html</loc>
+<loc>https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html</loc>
 <lastmod>2017-03-16T09:10:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html</loc>
+<loc>https://www.infoseczanshin.com/using-openmp-with-r-packages-in-os-x.html</loc>
 <lastmod>2016-07-21T18:01:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/introducing-snakecharmr.html</loc>
+<loc>https://www.infoseczanshin.com/introducing-snakecharmr.html</loc>
 <lastmod>2016-06-13T19:17:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</loc>
+<loc>https://www.infoseczanshin.com/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</loc>
 <lastmod>2016-04-24T19:22:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/threat-intelligence-indicators-are-not-signatures.html</loc>
+<loc>https://www.infoseczanshin.com/threat-intelligence-indicators-are-not-signatures.html</loc>
 <lastmod>2016-02-13T02:03:00-02:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/test-data-to-develop-splunk-content.html</loc>
+<loc>https://www.infoseczanshin.com/test-data-to-develop-splunk-content.html</loc>
 <lastmod>2016-02-02T17:40:00-02:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/category/opinions.html</loc>
+<loc>https://www.infoseczanshin.com/category/opinions.html</loc>
 <lastmod>2019-06-30T12:18:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/category/personal.html</loc>
+<loc>https://www.infoseczanshin.com/category/personal.html</loc>
 <lastmod>2016-04-24T19:22:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/category/tools.html</loc>
+<loc>https://www.infoseczanshin.com/category/tools.html</loc>
 <lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/aws.html</loc>
+<loc>https://www.infoseczanshin.com/tag/aws.html</loc>
 <lastmod>2019-06-30T12:18:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/cloud.html</loc>
+<loc>https://www.infoseczanshin.com/tag/cloud.html</loc>
 <lastmod>2019-06-30T12:18:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/event.html</loc>
+<loc>https://www.infoseczanshin.com/tag/event.html</loc>
 <lastmod>2019-06-30T12:18:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/reinforce.html</loc>
+<loc>https://www.infoseczanshin.com/tag/reinforce.html</loc>
 <lastmod>2019-06-30T12:18:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/linux.html</loc>
+<loc>https://www.infoseczanshin.com/tag/linux.html</loc>
 <lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/strongswan.html</loc>
+<loc>https://www.infoseczanshin.com/tag/strongswan.html</loc>
 <lastmod>2017-03-30T18:06:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/openvpn.html</loc>
+<loc>https://www.infoseczanshin.com/tag/openvpn.html</loc>
 <lastmod>2017-03-16T09:10:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/r.html</loc>
+<loc>https://www.infoseczanshin.com/tag/r.html</loc>
 <lastmod>2016-07-21T18:01:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/python.html</loc>
+<loc>https://www.infoseczanshin.com/tag/python.html</loc>
 <lastmod>2016-06-13T19:17:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/personal.html</loc>
+<loc>https://www.infoseczanshin.com/tag/personal.html</loc>
 <lastmod>2016-04-24T19:22:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/threat-intelligence.html</loc>
+<loc>https://www.infoseczanshin.com/tag/threat-intelligence.html</loc>
 <lastmod>2016-02-13T02:03:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/splunk.html</loc>
+<loc>https://www.infoseczanshin.com/tag/splunk.html</loc>
 <lastmod>2016-02-02T17:40:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/tag/siem.html</loc>
+<loc>https://www.infoseczanshin.com/tag/siem.html</loc>
 <lastmod>2016-02-02T17:40:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
-<loc>https://asieira.github.io/author/alexandre-sieira.html</loc>
+<loc>https://www.infoseczanshin.com/author/alexandre-sieira.html</loc>
 <lastmod>2019-06-30T12:18:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>

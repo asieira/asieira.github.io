@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - OpenVPN</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tag_openvpn.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2017-03-16T09:10:00-03:00</updated><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://asieira.github.io/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - OpenVPN</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tag_openvpn.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2017-03-16T09:10:00-03:00</updated><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
  &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPCs&lt;/a&gt; and keeping some non-public subnets for 
  resources you don't want to be accessible to the open Internet. &lt;/p&gt;
 &lt;p&gt;Usually when this is done, a 
@@ -94,7 +94,7 @@ the DNS configuration of the domain so that it validates that you do own the dom
 &lt;p&gt;If you use Route53 then follow 
 &lt;a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-creating.html"&gt;these instructions&lt;/a&gt;
 to create the TXT record and you'll end up with something like this:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="TXT record" src="https://asieira.github.io/images/accessing-aws-vpc-with-openvpn-access-server/TXT_record.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="TXT record" src="https://www.infoseczanshin.com/images/accessing-aws-vpc-with-openvpn-access-server/TXT_record.png"&gt;&lt;/p&gt;
 &lt;p&gt;Take this time to also create an &lt;code&gt;A&lt;/code&gt; record set that maps the hostname of your OpenVPN server to the
 Elastic IP address you assigned to it in the previous section.&lt;/p&gt;
 &lt;p&gt;Finally, we need to configure OpenVPN Access Server to use these certificates. In order to be ready 
@@ -220,7 +220,7 @@ password for every VPN login&lt;/code&gt;.&lt;/p&gt;
 normally in the admin interface in &lt;code&gt;User Management&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;User Permissions&lt;/code&gt;, and assign the user a password.&lt;/p&gt;
 &lt;p&gt;Then, the end user must log in to the non-admin web interface (&lt;code&gt;https://openvpn.example.com:943&lt;/code&gt; in our
 example), and choose &lt;code&gt;Login&lt;/code&gt; instead of &lt;code&gt;Connect&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="user login" src="https://asieira.github.io/images/accessing-aws-vpc-with-openvpn-access-server/user_login.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="user login" src="https://www.infoseczanshin.com/images/accessing-aws-vpc-with-openvpn-access-server/user_login.png"&gt;&lt;/p&gt;
 &lt;p&gt;In this page, they'll the given the choice to download a connection client or a profile configuration they
 can import into an existing client. But they will also be displayed the QR code they'll scan using
 Google Authenticator. Once they do that, everything should be good to go.&lt;/p&gt;

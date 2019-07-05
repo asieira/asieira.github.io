@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - Tools</title><link href="https://asieira.github.io/" rel="alternate"></link><link href="https://asieira.github.io/feeds/tools.atom.xml" rel="self"></link><id>https://asieira.github.io/</id><updated>2017-03-30T18:06:00-03:00</updated><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://asieira.github.io/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin - Tools</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/tools.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2017-03-30T18:06:00-03:00</updated><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
 I covered how to allow client-to-site connectivity to an AWS 
 &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPC&lt;/a&gt; environment.&lt;/p&gt;
 &lt;p&gt;On this post I decided to continue exploring AWS VPC connectivity and talk about how to
@@ -348,7 +348,7 @@ following files: &lt;code&gt;/var/log/messages&lt;/code&gt;, &lt;code&gt;/var/lo
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="StrongSwan"></category></entry><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://asieira.github.io/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
+&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="StrongSwan"></category></entry><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
  &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPCs&lt;/a&gt; and keeping some non-public subnets for 
  resources you don't want to be accessible to the open Internet. &lt;/p&gt;
 &lt;p&gt;Usually when this is done, a 
@@ -443,7 +443,7 @@ the DNS configuration of the domain so that it validates that you do own the dom
 &lt;p&gt;If you use Route53 then follow 
 &lt;a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-creating.html"&gt;these instructions&lt;/a&gt;
 to create the TXT record and you'll end up with something like this:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="TXT record" src="https://asieira.github.io/images/accessing-aws-vpc-with-openvpn-access-server/TXT_record.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="TXT record" src="https://www.infoseczanshin.com/images/accessing-aws-vpc-with-openvpn-access-server/TXT_record.png"&gt;&lt;/p&gt;
 &lt;p&gt;Take this time to also create an &lt;code&gt;A&lt;/code&gt; record set that maps the hostname of your OpenVPN server to the
 Elastic IP address you assigned to it in the previous section.&lt;/p&gt;
 &lt;p&gt;Finally, we need to configure OpenVPN Access Server to use these certificates. In order to be ready 
@@ -569,7 +569,7 @@ password for every VPN login&lt;/code&gt;.&lt;/p&gt;
 normally in the admin interface in &lt;code&gt;User Management&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;User Permissions&lt;/code&gt;, and assign the user a password.&lt;/p&gt;
 &lt;p&gt;Then, the end user must log in to the non-admin web interface (&lt;code&gt;https://openvpn.example.com:943&lt;/code&gt; in our
 example), and choose &lt;code&gt;Login&lt;/code&gt; instead of &lt;code&gt;Connect&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="user login" src="https://asieira.github.io/images/accessing-aws-vpc-with-openvpn-access-server/user_login.png"&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img alt="user login" src="https://www.infoseczanshin.com/images/accessing-aws-vpc-with-openvpn-access-server/user_login.png"&gt;&lt;/p&gt;
 &lt;p&gt;In this page, they'll the given the choice to download a connection client or a profile configuration they
 can import into an existing client. But they will also be displayed the QR code they'll scan using
 Google Authenticator. Once they do that, everything should be good to go.&lt;/p&gt;
@@ -649,7 +649,7 @@ for both the web server and OpenVPN server, as per
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://asieira.github.io/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
+&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://www.infoseczanshin.com/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
 function properly. But when you install a package in OS X you will probably get a pre-compiled version
 of said package from &lt;a href="https://cran.r-project.org/"&gt;CRAN&lt;/a&gt; that used their build environment and the
 default package options.&lt;/p&gt;
@@ -703,7 +703,7 @@ what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code
 the last step.&lt;/p&gt;
 &lt;p&gt;After all this, uninstall the R packages you want to with OpenMP with, and 
 &lt;a href="http://stackoverflow.com/questions/1474081/how-do-i-install-an-r-package-from-source"&gt;reinstall them from source&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://asieira.github.io/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
+&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://www.infoseczanshin.com/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
 in Linux and Mac OS X environments. When I first found out about it, the idea of using JSON as a way to
 serialize and deserialize values between Python and R was beautifully simple and intuitive.&lt;/p&gt;
 &lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
@@ -830,7 +830,7 @@ out &lt;a href="https://github.com/asieira/SnakeCharmR/issues"&gt;GitHub issues&
 have had experience with compiling Rcpp packages that use external libraries on Windows, your help 
 will be much appreciated.&lt;/p&gt;
 &lt;p&gt;Many thanks to &lt;a href="https://twitter.com/hrbrmstr"&gt;Bob Rudis&lt;/a&gt; for his invaluable help in getting this 
-project going. &lt;/p&gt;</content><category term="R"></category><category term="Python"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="https://asieira.github.io/test-data-to-develop-splunk-content.html" rel="alternate"></link><published>2016-02-02T17:40:00-02:00</published><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:asieira.github.io,2016-02-02:/test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;Using Splunk eventgen to create sample events from different devices.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
+project going. &lt;/p&gt;</content><category term="R"></category><category term="Python"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="https://www.infoseczanshin.com/test-data-to-develop-splunk-content.html" rel="alternate"></link><published>2016-02-02T17:40:00-02:00</published><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-02:/test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;Using Splunk eventgen to create sample events from different devices.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
 because it has embraced the development paradigm, and organizes standard and user-developed content into apps. And it 
 lets you write code in proper languages like Python or Java to process the data in ways that go beyond their own query 
 language.&lt;/p&gt;
@@ -868,7 +868,7 @@ archive) for a &lt;code&gt;samples&lt;/code&gt; directory and a &lt;code&gt;defa
 or the eventgen app (installed later) won't be able to access its sample data and configurations. The simplest way to 
 do this is on Splunk Web is to navigate to &lt;code&gt;Apps&lt;/code&gt; -&amp;gt; &lt;code&gt;Manage Apps&lt;/code&gt; and click on &lt;code&gt;Permissions&lt;/code&gt; under the &lt;code&gt;Sharing&lt;/code&gt; column
 for the app you want events from. Make sure the &lt;code&gt;Sharing for config file-only objects&lt;/code&gt; option is set to &lt;code&gt;All apps&lt;/code&gt;: 
-&lt;img alt="Splunk app permissions" src="https://asieira.github.io/images/splunk-test-data/app-permissions.png"&gt;&lt;/p&gt;
+&lt;img alt="Splunk app permissions" src="https://www.infoseczanshin.com/images/splunk-test-data/app-permissions.png"&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li&gt;
 &lt;p&gt;Download the &lt;a href="https://github.com/splunk/eventgen/"&gt;eventgen GitHub repository&lt;/a&gt; as a 
