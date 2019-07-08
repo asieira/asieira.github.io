@@ -167,6 +167,7 @@ pre {
     font-size: 110%;
     line-height: 1.45;
     color: #333332;
+    width: 100%
 }
 
 .post {
@@ -268,6 +269,7 @@ pre {
     padding-left: 25%; /* "left col (nav + list)" width */
     position: relative;
 }
+
 @media (max-width: 767px) {
     .sidebar {
         width: 100%;
