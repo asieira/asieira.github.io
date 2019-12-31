@@ -52,4 +52,4 @@ the eventgen app. Mark and unmark the &lt;code&gt;Enable ./bin/eventgen.py&lt;/c
 &lt;/ul&gt;
 &lt;p&gt;Once this is done, eventgen will inspect all other installed apps it can access (hence the permissions step above) and
 generate fake events for them according to their configurations, usually directly to the &lt;code&gt;main&lt;/code&gt; index. No easy way to
-choose which apps to generate events from at this time, unfortunately.&lt;/p&gt;</content><category term="splunk"></category><category term="siem"></category></entry></feed>
+choose which apps to generate events from at this time, unfortunately.&lt;/p&gt;</content><category term="Tools"></category><category term="splunk"></category><category term="siem"></category></entry></feed>

@@ -1,5 +1,278 @@
 <?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/all.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2019-07-30T12:00:00-03:00</updated><entry><title>Learning from the July 2019 Capital One Breach</title><link href="https://www.infoseczanshin.com/learning-from-the-july-2019-capital-one-breach.html" rel="alternate"></link><published>2019-07-30T12:00:00-03:00</published><updated>2019-07-30T12:00:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2019-07-30:/learning-from-the-july-2019-capital-one-breach.html</id><summary type="html">&lt;p&gt;Practical Advice to Prevent IAM Credential Abuse&lt;/p&gt;</summary><content type="html">&lt;p&gt;News broke today of &lt;a href="https://www.washingtonpost.com/national-security/capital-one-data-breach-compromises-tens-of-millions-of-credit-card-applications-fbi-says/2019/07/29/72114cc2-b243-11e9-8f6c-7828e68cb15f_story.html?utm_term=.f5b3ccbc7616"&gt;breach involving Capital One&lt;/a&gt;, involving the theft of data stored in non-public S3 buckets through a multi-step targeted attack. &lt;/p&gt;
+<feed xmlns="http://www.w3.org/2005/Atom"><title>InfoSec Zanshin</title><link href="https://www.infoseczanshin.com/" rel="alternate"></link><link href="https://www.infoseczanshin.com/feeds/all.atom.xml" rel="self"></link><id>https://www.infoseczanshin.com/</id><updated>2019-12-30T19:51:00-03:00</updated><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2019-12-30T19:51:00-03:00</published><updated>2019-12-30T19:51:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2019-12-30:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
+ &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPCs&lt;/a&gt; and keeping some non-public subnets for 
+ resources you don't want to be accessible to the open Internet. &lt;/p&gt;
+&lt;p&gt;Usually when this is done, a 
+&lt;a href="https://aws.amazon.com/blogs/security/how-to-record-ssh-sessions-established-through-a-bastion-host/"&gt;bastion host&lt;/a&gt; is set up on a VPC public subnet and accessed via 
+ SSH to reach those internal instances or resources, through secondary SSH connections or 
+ SSH tunnels. That is a good and simple solution that will work well for a simple environment
+ with few internal services and few users that need to access it.&lt;/p&gt;
+&lt;p&gt;However, I would like to explore an alternative: using
+&lt;a href="https://openvpn.net/index.php/access-server/on-amazon-cloud.html"&gt;OpenVPN Access Server&lt;/a&gt; to 
+create a client-to-site VPN connection to the VPC. This approach is really easy to implement
+and has some pretty interesting benefits:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Easy set up of two-factor authentication with 
+&lt;a href="https://en.wikipedia.org/wiki/Google_Authenticator"&gt;Google Authenticator&lt;/a&gt; or similar TOTP
+solutions. This is something you could also achieve with the bastion host as well using some 
+&lt;a href="https://sysconfig.org.uk/two-factor-authentication-with-ssh.html"&gt;PAM magic&lt;/a&gt; if you really 
+want to, by the way. &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Use of different IP address ranges to users of different groups, which allows different 
+&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html"&gt;Security Group&lt;/a&gt; 
+inbound rules on assets for internal resources based on who the authenticated VPN users are.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;A web interface for your users that simplifies the task of downloading the VPN client with
+the proper connection profile, which is far more manageable for users that are not of a 
+strong technical background.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Commercial support from the team at 
+&lt;a href="https://openvpn.net/index.php/login.html"&gt;OpenVPN&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;One of the downsides is that this solution will require you to buy 
+&lt;a href="https://openvpn.net/index.php/access-server/pricing.html"&gt;licenses&lt;/a&gt; for the OpenVPN
+Access Server if you plan to have more than two client connections at a time. But I find them
+to be reasonably priced.&lt;/p&gt;
+&lt;p&gt;This post was recently updated based on a fresh install using OpenVPN Access Server 3.7.5 and is 
+meant as a rough but coherent guide to the external references I used to get this working. 
+Hopefully it will save someone some time.&lt;/p&gt;
+&lt;h2&gt;OpenVPN Access Server Instance&lt;/h2&gt;
+&lt;p&gt;First, go to the &lt;a href="https://aws.amazon.com/marketplace/"&gt;AWS Marketplace&lt;/a&gt; and find the 
+&lt;a href="https://aws.amazon.com/marketplace/pp/B00MI40CAE"&gt;BYOL AMI for OpenVPN Access Server&lt;/a&gt;. Then,
+follow their 
+&lt;a href="https://docs.openvpn.net/how-to-tutorialsguides/virtual-platforms/amazon-web-services-ec2-tiered-appliance-quick-start-guide/"&gt;Quick Start Guide&lt;/a&gt;
+to perform the initial configuration.&lt;/p&gt;
+&lt;p&gt;A few things to keep in mind:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Make sure you install this on a public subnet of your VPC;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Assign the OpenVPN server EC2 instance an 
+&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-eips.html"&gt;elastic IP address&lt;/a&gt;
+so that if you stop and restart it the IP address won't change.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Updates, Updates and More Updates&lt;/h2&gt;
+&lt;p&gt;The first thing you'll want to do after you have finished the SSH questions and are logged
+into the instance is to fully update it and then reboot it by running the following commands:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo su -
+apt-get update
+apt-get dist-upgrade
+shutdown -r now
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Please don't skip the reboot, so that all updates actually take effect, such as updates to the
+kernel and to libraries that are currently being used by running processes.&lt;/p&gt;
+&lt;p&gt;After you reboot, the default installation will automatically run the 
+&lt;a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-agent.html"&gt;Systems Manager Agent&lt;/a&gt;, 
+so if you create a role with the proper permissions you should be able to log in using 
+&lt;a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager.html"&gt;Session Manager&lt;/a&gt; 
+and close access via SSH entirely.&lt;/p&gt;
+&lt;h2&gt;Web Server Certificates&lt;/h2&gt;
+&lt;p&gt;Now let's set up the OpenVPN Access Server web server so use &lt;a href="https://letsencrypt.org/"&gt;Let's Encrypt&lt;/a&gt; 
+certificates with automated renewal.&lt;/p&gt;
+&lt;p&gt;First, as &lt;code&gt;root&lt;/code&gt;, &lt;a href="https://certbot.eff.org/lets-encrypt/ubuntubionic-other"&gt;install certbot&lt;/a&gt; using DNS validation
+through Route53:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install software-properties-common
+sudo add-apt-repository universe
+sudo add-apt-repository ppa:certbot/certbot
+sudo apt-get update
+apt-get install python3-certbot-dns-route53
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then make sure you append a new policy to the OpenVPN instance role with the 
+&lt;a href="https://certbot-dns-route53.readthedocs.io/en/stable/"&gt;necessary permissions&lt;/a&gt;, replacing &lt;code&gt;YOURHOSTEDZONEID&lt;/code&gt; with 
+the correct zone ID:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;Version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2012-10-17&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;Id&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;certbot-dns-route53 sample policy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+    &lt;span class="nt"&gt;&amp;quot;Statement&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;quot;Effect&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Allow&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;quot;Action&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+                &lt;span class="s2"&gt;&amp;quot;route53:ListHostedZones&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+                &lt;span class="s2"&gt;&amp;quot;route53:GetChange&amp;quot;&lt;/span&gt;
+            &lt;span class="p"&gt;],&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;quot;Resource&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+                &lt;span class="s2"&gt;&amp;quot;*&amp;quot;&lt;/span&gt;
+            &lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="p"&gt;},&lt;/span&gt;
+        &lt;span class="p"&gt;{&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;quot;Effect&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Allow&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;quot;Action&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+                &lt;span class="s2"&gt;&amp;quot;route53:ChangeResourceRecordSets&amp;quot;&lt;/span&gt;
+            &lt;span class="p"&gt;],&lt;/span&gt;
+            &lt;span class="nt"&gt;&amp;quot;Resource&amp;quot;&lt;/span&gt; &lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
+                &lt;span class="s2"&gt;&amp;quot;arn:aws:route53:::hostedzone/YOURHOSTEDZONEID&amp;quot;&lt;/span&gt;
+            &lt;span class="p"&gt;]&lt;/span&gt;
+        &lt;span class="p"&gt;}&lt;/span&gt;
+    &lt;span class="p"&gt;]&lt;/span&gt;
+&lt;span class="p"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Take this time to also create an &lt;code&gt;A&lt;/code&gt; record set in Route53 that maps the hostname of your OpenVPN server to the
+Elastic IP address you assigned to it in the previous section.&lt;/p&gt;
+&lt;p&gt;In order to be ready for automated renewal later on, let's do this by creating three scripts on specific paths that 
+certbot uses when creating and loading certs (pre, deploy and post hooks) that I adapted from 
+&lt;a href="https://www.sideras.net/lets-encrypt-https-certificates-for-openvpn-as-access-server/"&gt;elsewhere&lt;/a&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cat &amp;gt; /etc/letsencrypt/renewal-hooks/pre/stop_openvpn.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
+&lt;span class="s"&gt;#!/bin/sh&lt;/span&gt;
+&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/sacli stop&lt;/span&gt;
+&lt;span class="s"&gt;EOF&lt;/span&gt;
+
+chmod a+x /etc/letsencrypt/renewal-hooks/pre/start_openvpn.sh
+
+cat &amp;gt; /etc/letsencrypt/renewal-hooks/post/start_openvpn.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
+&lt;span class="s"&gt;#!/bin/sh&lt;/span&gt;
+&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/sacli start&lt;/span&gt;
+&lt;span class="s"&gt;EOF&lt;/span&gt;
+
+chmod a+x /etc/letsencrypt/renewal-hooks/post/start_openvpn.sh
+
+cat &amp;gt; /etc/letsencrypt/renewal-hooks/deploy/load_openvpn.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
+&lt;span class="s"&gt;#!/bin/sh&lt;/span&gt;
+&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/confdba -mk cs.ca_bundle -v &amp;quot;`cat /etc/letsencrypt/live/openvpn.example.com/fullchain.pem`&amp;quot;&lt;/span&gt;
+&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/confdba -mk cs.priv_key -v &amp;quot;`cat /etc/letsencrypt/live/openvpn.example.com/privkey.pem`&amp;quot; &amp;gt; /dev/null&lt;/span&gt;
+&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/confdba -mk cs.cert -v &amp;quot;`cat /etc/letsencrypt/live/openvpn.example.com/cert.pem`&amp;quot;&lt;/span&gt;
+&lt;span class="s"&gt;EOF&lt;/span&gt;
+
+chmod a+x /etc/letsencrypt/renewal-hooks/deploy/load_openvpn.sh
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Please make sure you replace &lt;code&gt;openvpn.example.com&lt;/code&gt; in the code above with the actual hostname you chose for your 
+OpenVPN server.&lt;/p&gt;
+&lt;p&gt;Then, request a certbot certificate by issuing the following command and following the on-screen instructions:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;certbot certonly --dns-route53 -d openvpn.example.com
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;At this point, as soon as the OpenVPN service comes back up it should be using the newly generated certificate.&lt;/p&gt;
+&lt;p&gt;Finally, create a regular task executed twice a day by running &lt;code&gt;crontab -e&lt;/code&gt; as &lt;code&gt;root&lt;/code&gt; and entering the following new entry:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;0 1,13 * * * /usr/bin/certbot renew --quiet&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Please choose an arbitrary number between 1 and 60 and replace the first &lt;code&gt;0&lt;/code&gt; in the above line. Also choose 
+different hours (instead of &lt;code&gt;1,13&lt;/code&gt;) for executing this. If lots of people configure their cron jobs to  hit 
+Let's Encrypt at exactly the same times we might end up with an accidental DDoS.&lt;/p&gt;
+&lt;p&gt;At this point, you should be able to access the admin interface (by default in our example it would be
+&lt;code&gt;https://openvpn.example.com:943/admin&lt;/code&gt;), and not get a warning about an invalid certificate. Just remove the
+&lt;code&gt;/admin&lt;/code&gt; from the URL and you'll land on the 
+&lt;a href="https://openvpn.net/index.php/access-server/section-faq-openvpn-as/client-configuration.html"&gt;user-focused page&lt;/a&gt; 
+instead, where they can log in to download the client software binaries and profile configuration, and also scan 
+Google Authenticator QR codes.&lt;/p&gt;
+&lt;p&gt;Go into the admin interface and perform the configuration that best suits your needs. We'll discuss two
+particularly interesting aspects of the configuration next.&lt;/p&gt;
+&lt;h2&gt;Routing&lt;/h2&gt;
+&lt;p&gt;You may choose to have OpenVPN use routing instead of NAT when it forwards traffic from the connected clients
+into the VPC environment. If you do that, you can use its ability to assign different users or groups of users
+IP addresses in different ranges. This, in turn, allows you to configure Security Group rules inside the VPC
+that will only allow certain users or groups of users to communicate with specific services.&lt;/p&gt;
+&lt;p&gt;If you do that, however, keep in mind that you'll need to take some additional steps:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Ensure that the IP address ranges you assign VPN clients are &lt;em&gt;outside&lt;/em&gt; the CIDR range for the entire VPC.
+So if your VPC has addresses on 172.16.0.0/16, you can't assign any part of that address space to VPN clients
+even if there are no VPC subnets currently using them.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;You'll need to update your VPC routing configuration. For each CIDR of addresses that can be assigned to VPN 
+clients, &lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html#AddRemoveRoutes"&gt;add a new route&lt;/a&gt;
+with that CIDR as the &lt;code&gt;Destination&lt;/code&gt; and the OpenVPN server instance as the &lt;code&gt;Target&lt;/code&gt;. &lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html#EIP_Disable_SrcDestCheck"&gt;Disable the source/destination check&lt;/a&gt; 
+on the OpenVPN Access Server instance so that it can "answer for" other ranges of IP address in the AWS network
+stack.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;Google Authenticator&lt;/h2&gt;
+&lt;p&gt;If everything else is working at this point, requiring users to have two-factor authentication using
+Google Authenticator should be pretty easy by now. First, on the admin interface go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp;
+&lt;code&gt;Client Settings&lt;/code&gt; and check the box that says &lt;code&gt;Require that users provide a Google Authenticator one-time 
+password for every VPN login&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;What it took me a while to figure out was how to enroll users. Basically what you do is create the user
+normally in the admin interface in &lt;code&gt;User Management&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;User Permissions&lt;/code&gt;, and assign the user a password.&lt;/p&gt;
+&lt;p&gt;Then, the end user must log in to the non-admin web interface (&lt;code&gt;https://openvpn.example.com&lt;/code&gt; in our
+example). In this page, they'll the given the choice to download a connection client or a profile configuration they
+can import into an existing client. But they will also be displayed the QR code they'll scan using
+Google Authenticator. Once they do that, everything should be good to go.&lt;/p&gt;
+&lt;h2&gt;CloudWatch Logs Agent&lt;/h2&gt;
+&lt;p&gt;Next let's configure the &lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;CloudWatch Logs Agent&lt;/a&gt;
+so that the OpenVPN Server logs are centralized and easy to query if necessary, and also protected from any
+attackers that might gain access to the server.&lt;/p&gt;
+&lt;p&gt;Firstly, a minor adjustment is needed to allow the agent installation to go properly. The provided AWS
+installation script checks &lt;code&gt;/etc/issue&lt;/code&gt; to determine which Linux distribution the machine uses. And OpenVPN
+Access Server has a custom string in that file. So we'll need to edit it to make sure the first line starts 
+with &lt;code&gt;Ubuntu&lt;/code&gt; or else the script will refuse to run.&lt;/p&gt;
+&lt;p&gt;I also recommend assigning the machine its proper hostname by issuing the following command as &lt;code&gt;root&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;hostname openvpn.example.com
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Then, make sure you edit &lt;code&gt;/etc/hostname&lt;/code&gt; and &lt;code&gt;/etc/hosts&lt;/code&gt; to make sure they also match the the full hostname.&lt;/p&gt;
+&lt;p&gt;Finally, you can then execute the 
+&lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;official AWS installation instructions&lt;/a&gt;
+with the following three recommendations:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;Make sure you include &lt;code&gt;/var/log/openvpnas.log&lt;/code&gt;, &lt;code&gt;/var/log/syslog&lt;/code&gt; and &lt;code&gt;/var/log/auth.log&lt;/code&gt; to the log
+collection.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When asked what the log stream name should be, I recommend you use the newly-configured machine name
+for clarity.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When asked about the timestamp format, choose to use a custom format and enter &lt;code&gt;%Y-%m-%dT%H:%M:%S%z&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Then, update &lt;code&gt;/etc/rsyslog.conf&lt;/code&gt; as per &lt;a href="http://serverfault.com/a/592120"&gt;these instructions&lt;/a&gt; and
+restart the rsyslog service:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;service rsyslog restart
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;Finally, you'll need to enable the service to run via systemd (as &lt;code&gt;root&lt;/code&gt;):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; awslogs
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You should now see the new log groups on the AWS Console.&lt;/p&gt;
+&lt;p&gt;I would also like to suggest that you create a new file &lt;code&gt;/etc/logrotate.d/openvpnas&lt;/code&gt; with the following
+content:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;/var/log/apt/openvpnas.log {&lt;/span&gt;
+&lt;span class="err"&gt;  rotate 90&lt;/span&gt;
+&lt;span class="err"&gt;  daily&lt;/span&gt;
+&lt;span class="err"&gt;  compress&lt;/span&gt;
+&lt;span class="err"&gt;  missingok&lt;/span&gt;
+&lt;span class="err"&gt;  notifempty&lt;/span&gt;
+&lt;span class="err"&gt;}&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;h2&gt;Additional Recommendations&lt;/h2&gt;
+&lt;p&gt;A few security-minded tips that I would recommend you implement:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;On the web admin interface, go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;SSL Settings&lt;/code&gt; and select &lt;code&gt;TLS 1.1&lt;/code&gt; as the minimum 
+for both the web server and OpenVPN server, as per 
+&lt;a href="https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet#Rule_-_Only_Support_Strong_Protocols"&gt;industry best practice&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</content><category term="Tools"></category><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Learning from the July 2019 Capital One Breach</title><link href="https://www.infoseczanshin.com/learning-from-the-july-2019-capital-one-breach.html" rel="alternate"></link><published>2019-07-30T12:00:00-03:00</published><updated>2019-07-30T12:00:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2019-07-30:/learning-from-the-july-2019-capital-one-breach.html</id><summary type="html">&lt;p&gt;Practical Advice to Prevent IAM Credential Abuse&lt;/p&gt;</summary><content type="html">&lt;p&gt;News broke today of &lt;a href="https://www.washingtonpost.com/national-security/capital-one-data-breach-compromises-tens-of-millions-of-credit-card-applications-fbi-says/2019/07/29/72114cc2-b243-11e9-8f6c-7828e68cb15f_story.html?utm_term=.f5b3ccbc7616"&gt;breach involving Capital One&lt;/a&gt;, involving the theft of data stored in non-public S3 buckets through a multi-step targeted attack. &lt;/p&gt;
 &lt;p&gt;The first thing I want to make clear is that I sympathize with the Capital One security and operations teams at this difficult time. Capital One is a well-known innovator in cloud security, has very competent people dedicated to this and has even developed high quality open source solutions such as &lt;a href="https://cloudcustodian.io/"&gt;Cloud Custodian&lt;/a&gt; that benefit the entire community. No security is perfect, and if you are a big enough target get used to the idea that being breached is a question of "when" not "if".&lt;/p&gt;
 &lt;p&gt;I sincerely hope that this incident is not blown out of proportion and does not cause a slow down of their strategy of being a cloud-first bank by next year, as they announced on stage at &lt;a href="https://www.infoseczanshin.com/highlights-from-aws-reinforce-2019.html"&gt;AWS re:Inforce&lt;/a&gt;. In any case, I think that an organization as heavily invested into cloud security as Capital One being breached is a good reminder that security is hard. Also, that even though the cloud offers many advantages in applying security over on-premises environments, it is still relatively new and evolving technology and there's a non-trivial learning curve.&lt;/p&gt;
 &lt;p&gt;You can see the &lt;a href="#resources"&gt;Resources&lt;/a&gt; section below for detailed write-ups, and the &lt;a href="https://regmedia.co.uk/2019/07/29/capital_one_paige_thompson.pdf"&gt;affidavit&lt;/a&gt; describing what is known so far about this case. Reading through this and discussing this with others, I'd like to document a few practical guidelines and mitigations that might help prevent similar attacks in the future.&lt;/p&gt;
@@ -44,7 +317,7 @@
 &lt;li&gt;
 &lt;p&gt;&lt;a href="https://medium.com/netflix-techblog/netflix-information-security-preventing-credential-compromise-in-aws-41b112c15179"&gt;Netflix Information Security: Preventing Credential Compromise in AWS&lt;/a&gt; by the Netflix team and brought to my attention by &lt;a href="https://twitter.com/0xdabbad00"&gt;Scott Piper&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="aws"></category><category term="cloud"></category><category term="breach"></category></entry><entry><title>Highlights from AWS re:Inforce 2019</title><link href="https://www.infoseczanshin.com/highlights-from-aws-reinforce-2019.html" rel="alternate"></link><published>2019-06-30T12:18:00-03:00</published><updated>2019-06-30T12:18:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2019-06-30:/highlights-from-aws-reinforce-2019.html</id><summary type="html">&lt;p&gt;A not at all impartial view of AWS' first security-only event&lt;/p&gt;</summary><content type="html">&lt;p&gt;This week I had the pleasure of attending the first ever edition of &lt;a href="https://reinforce.awsevents.com/"&gt;AWS re:Inforce&lt;/a&gt;. In this post I'll try to summarize my impressions of the event, plus include comments and references to the main points of attention and associated documentation and related session videos.&lt;/p&gt;
+&lt;/ul&gt;</content><category term="Cloud"></category><category term="aws"></category><category term="cloud"></category><category term="breach"></category></entry><entry><title>Highlights from AWS re:Inforce 2019</title><link href="https://www.infoseczanshin.com/highlights-from-aws-reinforce-2019.html" rel="alternate"></link><published>2019-06-30T12:18:00-03:00</published><updated>2019-06-30T12:18:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2019-06-30:/highlights-from-aws-reinforce-2019.html</id><summary type="html">&lt;p&gt;A not at all impartial view of AWS' first security-only event&lt;/p&gt;</summary><content type="html">&lt;p&gt;This week I had the pleasure of attending the first ever edition of &lt;a href="https://reinforce.awsevents.com/"&gt;AWS re:Inforce&lt;/a&gt;. In this post I'll try to summarize my impressions of the event, plus include comments and references to the main points of attention and associated documentation and related session videos.&lt;/p&gt;
 &lt;h2&gt;The Big News&lt;/h2&gt;
 &lt;p&gt;&lt;a href="https://aws.amazon.com/blogs/aws/new-vpc-traffic-mirroring/"&gt;VPC Traffic Mirroring&lt;/a&gt;, was, in my opinion, the most market-relevant announcement at the conference. &lt;/p&gt;
 &lt;p&gt;This holds the promise of allowing several security product categories to be first-class citizens in AWS for the first time. After all, AWS has full control into what integration points they allow for traditional security vendors. They are slowly adding integration points, from early days as firewalls using Marketplace AMIs to act as NAT instances to something more explicit like &lt;a href="https://aws.amazon.com/marketplace/solutions/security/waf-managed-rules"&gt;WAF Managed Rules&lt;/a&gt;. Though not explicitly associated with partners, this is still a big deal for many of them.&lt;/p&gt;
@@ -135,7 +408,7 @@
 &lt;p&gt;&lt;a href="https://medium.com/@ashishrajan/aws-re-inforce-boston-2019-aws-security-conference-recap-what-they-didnt-tell-you-on-stage-9b7ecc04ddfe"&gt;AWS Re:inforce Boston 2019— AWS Security Conference: Recap (What they didn’t tell you on stage)&lt;/a&gt; by &lt;a href="https://medium.com/@ashishrajan"&gt;Ashish Rajan&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Thank you to &lt;a href="https://twitter.com/dseverski"&gt;David Severski&lt;/a&gt; for helping review an early draft of this document and providing valuable feedback.&lt;/p&gt;</content><category term="aws"></category><category term="cloud"></category><category term="event"></category><category term="reInforce"></category></entry><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
+&lt;p&gt;Thank you to &lt;a href="https://twitter.com/dseverski"&gt;David Severski&lt;/a&gt; for helping review an early draft of this document and providing valuable feedback.&lt;/p&gt;</content><category term="Opinions"></category><category term="aws"></category><category term="cloud"></category><category term="event"></category><category term="reInforce"></category></entry><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
 I covered how to allow client-to-site connectivity to an AWS 
 &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPC&lt;/a&gt; environment.&lt;/p&gt;
 &lt;p&gt;On this post I decided to continue exploring AWS VPC connectivity and talk about how to
@@ -484,308 +757,7 @@ following files: &lt;code&gt;/var/log/messages&lt;/code&gt;, &lt;code&gt;/var/lo
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="StrongSwan"></category></entry><entry><title>Using OpenVPN Access Server to Access AWS VPCs</title><link href="https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html" rel="alternate"></link><published>2017-03-16T09:10:00-03:00</published><updated>2017-03-16T09:10:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-16:/using-openvpn-access-server-to-access-aws-vpcs.html</id><summary type="html">&lt;p&gt;Establishing a client-to-site VPN with AWS VPCs using auto-renewing Let's Encrypt certificates&lt;/p&gt;</summary><content type="html">&lt;p&gt;If you use AWS for anything non-trivial, you are likely using 
- &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPCs&lt;/a&gt; and keeping some non-public subnets for 
- resources you don't want to be accessible to the open Internet. &lt;/p&gt;
-&lt;p&gt;Usually when this is done, a 
-&lt;a href="https://aws.amazon.com/blogs/security/how-to-record-ssh-sessions-established-through-a-bastion-host/"&gt;bastion host&lt;/a&gt; is set up on a VPC public subnet and accessed via 
- SSH to reach those internal instances or resources, through secondary SSH connections or 
- SSH tunnels. That is a good and simple solution that will work well for a simple environment
- with few internal services and few users that need to access it.&lt;/p&gt;
-&lt;p&gt;However, I would like to explore an alternative: using
-&lt;a href="https://openvpn.net/index.php/access-server/on-amazon-cloud.html"&gt;OpenVPN Access Server&lt;/a&gt; to 
-create a client-to-site VPN connection to the VPC. This approach is really easy to implement
-and has some pretty interesting benefits:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Easy set up of two-factor authentication with 
-&lt;a href="https://en.wikipedia.org/wiki/Google_Authenticator"&gt;Google Authenticator&lt;/a&gt; or similar TOTP
-solutions. This is something you could also achieve with the bastion host as well using some 
-&lt;a href="https://sysconfig.org.uk/two-factor-authentication-with-ssh.html"&gt;PAM magic&lt;/a&gt; if you really 
-want to, by the way. &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Use of different IP address ranges to users of different groups, which allows different 
-&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html"&gt;Security Group&lt;/a&gt; 
-inbound rules on assets for internal resources based on who the authenticated VPN users are.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;A web interface for your users that simplifies the task of downloading the VPN client with
-the proper connection profile, which is far more manageable for users that are not of a 
-strong technical background.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Commercial support from the team at 
-&lt;a href="https://openvpn.net/index.php/login.html"&gt;OpenVPN&lt;/a&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;One of the downsides is that this solution will require you to buy 
-&lt;a href="https://openvpn.net/index.php/access-server/pricing.html"&gt;licenses&lt;/a&gt; for the OpenVPN
-Access Server if you plan to have more than two client connections at a time. But I find them
-to be reasonably priced.&lt;/p&gt;
-&lt;p&gt;For the record, this was documented based on OpenVPN Access Server 2.1.4 and is meant as
-a rough but coherent guide to the external references I used to get this working. Hopefully
-it will save someone some time.&lt;/p&gt;
-&lt;h2&gt;OpenVPN Access Server Instance&lt;/h2&gt;
-&lt;p&gt;First, go to the &lt;a href="https://aws.amazon.com/marketplace/"&gt;AWS Marketplace&lt;/a&gt; and find the 
-&lt;a href="https://aws.amazon.com/marketplace/pp/B00MI40CAE"&gt;BYOL AMI for OpenVPN Access Server&lt;/a&gt;. Then,
-follow their 
-&lt;a href="https://docs.openvpn.net/how-to-tutorialsguides/virtual-platforms/amazon-web-services-ec2-tiered-appliance-quick-start-guide/"&gt;Quick Start Guide&lt;/a&gt;
-to perform the initial configuration.&lt;/p&gt;
-&lt;p&gt;A few things to keep in mind:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Make sure you install this on a public subnet of your VPC;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Assign the OpenVPN server EC2 instance an 
-&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-eips.html"&gt;elastic IP address&lt;/a&gt;
-so that if you stop and restart it the IP address won't change.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Updates, Updates and More Updates&lt;/h2&gt;
-&lt;p&gt;The first thing you'll want to do after you have finished the SSH questions and are logged
-into the instance is to fully update it and then reboot it by running the following commands:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo su -
-apt-get update
-apt-get dist-upgrade
-shutdown -r now
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Please don't skip the reboot, so that all updates actually take effect, such as updates to the
-kernel and to libraries that are currently being used by running processes.&lt;/p&gt;
-&lt;h2&gt;Web Server Certificates&lt;/h2&gt;
-&lt;p&gt;Now let's set up the OpenVPN Access Server web server so use &lt;a href="https://letsencrypt.org/"&gt;Let's Encrypt&lt;/a&gt; 
-certificates with automated renewal.&lt;/p&gt;
-&lt;p&gt;First, as &lt;code&gt;root&lt;/code&gt;, &lt;a href="https://certbot.eff.org/#ubuntuother-other"&gt;install certbot&lt;/a&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /root
-wget https://dl.eff.org/certbot-auto
-chmod a+x certbot-auto
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Installing the certificates will require issuing custom commands using an OpenVPN Access Server
-script, so we'll need to request the certificate &lt;a href="https://certbot.eff.org/docs/using.html#manual"&gt;manually&lt;/a&gt;. &lt;/p&gt;
-&lt;p&gt;Choose a hostname whithin a domain whose DNS records you control. Then, do the following 
-as &lt;code&gt;root&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;./certbot-auto certonly --manual --preferred-challenges dns
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Follow the on-screen instructions, and when requested for the domain of the certificate enter 
-the hostname you'll use for the OpenVPN server. It will ask you to create a TXT record on
-the DNS configuration of the domain so that it validates that you do own the domain. &lt;/p&gt;
-&lt;p&gt;If you use Route53 then follow 
-&lt;a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-creating.html"&gt;these instructions&lt;/a&gt;
-to create the TXT record and you'll end up with something like this:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="TXT record" src="https://www.infoseczanshin.com/images/accessing-aws-vpc-with-openvpn-access-server/TXT_record.png"&gt;&lt;/p&gt;
-&lt;p&gt;Take this time to also create an &lt;code&gt;A&lt;/code&gt; record set that maps the hostname of your OpenVPN server to the
-Elastic IP address you assigned to it in the previous section.&lt;/p&gt;
-&lt;p&gt;Finally, we need to configure OpenVPN Access Server to use these certificates. In order to be ready 
-for automated renewal later on, let's do this by creating two scripts that I adapted
-from &lt;a href="https://www.sideras.net/lets-encrypt-https-certificates-for-openvpn-as-access-server/"&gt;elsewhere&lt;/a&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cat &amp;gt; /root/pre-hook.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
-&lt;span class="s"&gt;#!/bin/sh&lt;/span&gt;
-&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/sacli stop&lt;/span&gt;
-&lt;span class="s"&gt;EOF&lt;/span&gt;
-
-chmod a+x /root/pre-hook.sh
-
-cat &amp;gt; /root/post-hook.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
-&lt;span class="s"&gt;#!/bin/sh&lt;/span&gt;
-&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/confdba -mk cs.ca_bundle -v &amp;quot;`cat /etc/letsencrypt/live/openvpn.example.com/fullchain.pem`&amp;quot;&lt;/span&gt;
-&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/confdba -mk cs.priv_key -v &amp;quot;`cat /etc/letsencrypt/live/openvpn.example.com/privkey.pem`&amp;quot; &amp;gt; /dev/null&lt;/span&gt;
-&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/confdba -mk cs.cert -v &amp;quot;`cat /etc/letsencrypt/live/openvpn.example.com/cert.pem`&amp;quot;&lt;/span&gt;
-&lt;span class="s"&gt;/usr/local/openvpn_as/scripts/sacli start&lt;/span&gt;
-&lt;span class="s"&gt;EOF&lt;/span&gt;
-
-chmod a+x /root/pre-hook.sh
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Please replace &lt;code&gt;openvpn.example.com&lt;/code&gt; in the code above with the actual hostname you chose for your OpenVPN 
-server. Then, you immediately run the scripts to load the newly created certificate:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;/root/pre-hook.sh
-/root/post-hook.sh
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;If you use Route 53 we can setup the &lt;a href="https://certbot.eff.org/docs/using.html#renewing-certificates"&gt;automated renewal&lt;/a&gt;
-of these certificates by using &lt;a href="https://github.com/jed/certbot-route53"&gt;certbot-route53&lt;/a&gt;. First, download the
- script:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;curl -sL https://git.io/vylLx -o /root/certbot-route53.sh
-chmod a+x /root/certbot-route53.sh
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Then, ensure the IAM role associated with the OpenVPN instance has the following policy attached to it:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
-    &lt;span class="nt"&gt;&amp;quot;Version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2012-10-17&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-    &lt;span class="nt"&gt;&amp;quot;Statement&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-        &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Effect&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Allow&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Action&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;route53:ListHostedZones&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;route53:ListHostedZonesByName&amp;quot;&lt;/span&gt;
-            &lt;span class="p"&gt;],&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Resource&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;*&amp;quot;&lt;/span&gt;
-            &lt;span class="p"&gt;]&lt;/span&gt;
-        &lt;span class="p"&gt;},&lt;/span&gt;
-        &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Effect&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Allow&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Action&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;route53:ChangeResourceRecordSets&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;route53:GetHostedZone&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;route53:ListResourceRecordSets&amp;quot;&lt;/span&gt;
-            &lt;span class="p"&gt;],&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Resource&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;arn:aws:route53:::hostedzone/&amp;lt;your hosted zone ID&amp;gt;&amp;quot;&lt;/span&gt;
-            &lt;span class="p"&gt;]&lt;/span&gt;
-        &lt;span class="p"&gt;},&lt;/span&gt;
-        &lt;span class="p"&gt;{&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Effect&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;Allow&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Action&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;route53:GetChange&amp;quot;&lt;/span&gt;
-            &lt;span class="p"&gt;],&lt;/span&gt;
-            &lt;span class="nt"&gt;&amp;quot;Resource&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
-                &lt;span class="s2"&gt;&amp;quot;arn:aws:route53:::change/*&amp;quot;&lt;/span&gt;
-            &lt;span class="p"&gt;]&lt;/span&gt;
-        &lt;span class="p"&gt;}&lt;/span&gt;
-    &lt;span class="p"&gt;]&lt;/span&gt;
-&lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Finally, create a regular task executed twice a day by running &lt;code&gt;crontab -e&lt;/code&gt; as &lt;code&gt;root&lt;/code&gt; and entering the following new entry:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="mi"&gt;0&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;&lt;span class="mi"&gt;13&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;root&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;certbot&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;auto&lt;/span&gt; &lt;span class="n"&gt;renew&lt;/span&gt; &lt;span class="c1"&gt;--pre-hook &amp;quot;/root/pre-hook.sh&amp;quot; --post-hook &amp;quot;/root/post-hook.sh&amp;quot; --manual-auth-hook &amp;quot;/root/certbot-route53.sh&amp;quot; --manual-cleanup-hook &amp;quot;/root/certbot-route53.sh&amp;quot; --quiet --manual-public-ip-logging-ok&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Please choose an arbitrary number between 1 and 60 and replace the first &lt;code&gt;0&lt;/code&gt; in the above line. Also choose 
-different hours (instead of &lt;code&gt;1,13&lt;/code&gt;) for executing this. If lots of people configure their cron jobs to  hit 
-Let's Encrypt at exactly the same times we might end up with an accidental DDoS.&lt;/p&gt;
-&lt;p&gt;At this point, you should be able to access the admin interface (by default in our example it would be
-&lt;code&gt;https://openvpn.example.com:943/admin&lt;/code&gt;), and not get a warning about an invalid certificate. Just remove the
-&lt;code&gt;/admin&lt;/code&gt; from the URL and you'll land on the 
-&lt;a href="https://openvpn.net/index.php/access-server/section-faq-openvpn-as/client-configuration.html"&gt;user-focused page&lt;/a&gt; instead, where they can log in to download
-the client software binaries and profile configuration, and also scan Google Authenticator QR codes.&lt;/p&gt;
-&lt;p&gt;Go into the admin interface and perform the configuration that best suits your needs. We'll discuss two
-particularly interesting aspects of the configuration next.&lt;/p&gt;
-&lt;h2&gt;Routing&lt;/h2&gt;
-&lt;p&gt;You may choose to have OpenVPN use routing instead of NAT when it forwards traffic from the connected clients
-into the VPC environment. If you do that, you can use its ability to assign different users or groups of users
-IP addresses in different ranges. This, in turn, allows you to configure Security Group rules inside the VPC
-that will only allow certain users or groups of users to communicate with specific services.&lt;/p&gt;
-&lt;p&gt;If you do that, however, keep in mind that you'll need to take some additional steps:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Ensure that the IP address ranges you assign VPN clients are &lt;em&gt;outside&lt;/em&gt; the CIDR range for the entire VPC.
-So if your VPC has addresses on 172.16.0.0/16, you can't assign any part of that address space to VPN clients
-even if there are no VPC subnets currently using them.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;You'll need to update your VPC routing configuration. For each CIDR of addresses that can be assigned to VPN 
-clients, &lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Route_Tables.html#AddRemoveRoutes"&gt;add a new route&lt;/a&gt;
-with that CIDR as the &lt;code&gt;Destination&lt;/code&gt; and the OpenVPN server instance as the &lt;code&gt;Target&lt;/code&gt;. &lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html#EIP_Disable_SrcDestCheck"&gt;Disable the source/destination check&lt;/a&gt; 
-on the OpenVPN Access Server instance so that it can "answer for" other ranges of IP address in the AWS network
-stack.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2&gt;Google Authenticator&lt;/h2&gt;
-&lt;p&gt;If everything else is working at this point, requiring users to have two-factor authentication using
-Google Authenticator should be pretty easy by now. First, on the admin interface go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp;
-&lt;code&gt;Client Settings&lt;/code&gt; and check the box that says &lt;code&gt;Require that users provide a Google Authenticator one-time 
-password for every VPN login&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;What it took me a while to figure out was how to enroll users. Basically what you do is create the user
-normally in the admin interface in &lt;code&gt;User Management&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;User Permissions&lt;/code&gt;, and assign the user a password.&lt;/p&gt;
-&lt;p&gt;Then, the end user must log in to the non-admin web interface (&lt;code&gt;https://openvpn.example.com:943&lt;/code&gt; in our
-example), and choose &lt;code&gt;Login&lt;/code&gt; instead of &lt;code&gt;Connect&lt;/code&gt;:&lt;/p&gt;
-&lt;p&gt;&lt;img alt="user login" src="https://www.infoseczanshin.com/images/accessing-aws-vpc-with-openvpn-access-server/user_login.png"&gt;&lt;/p&gt;
-&lt;p&gt;In this page, they'll the given the choice to download a connection client or a profile configuration they
-can import into an existing client. But they will also be displayed the QR code they'll scan using
-Google Authenticator. Once they do that, everything should be good to go.&lt;/p&gt;
-&lt;h2&gt;CloudWatch Logs Agent&lt;/h2&gt;
-&lt;p&gt;Next let's configure the &lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;CloudWatch Logs Agent&lt;/a&gt;
-so that the OpenVPN Server logs are centralized and easy to query if necessary, and also protected from any
-attackers that might gain access to the server.&lt;/p&gt;
-&lt;p&gt;Firstly, a minor adjustment is needed to allow the agent installation to go properly. The provided AWS
-installation script checks &lt;code&gt;/etc/issue&lt;/code&gt; to determine which Linux distribution the machine uses. And OpenVPN
-Access Server has a custom string in that file. So we'll need to edit it to make sure the first line starts 
-with &lt;code&gt;Ubuntu&lt;/code&gt; or else the script will refuse to run.&lt;/p&gt;
-&lt;p&gt;I also recommend assigning the machine its proper hostname by issuing the following command as &lt;code&gt;root&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;hostname openvpn.example.com
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Then, make sure you edit &lt;code&gt;/etc/hostname&lt;/code&gt; and &lt;code&gt;/etc/hosts&lt;/code&gt; to make sure they also match the the full hostname.&lt;/p&gt;
-&lt;p&gt;Finally, you can then execute the 
-&lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;official AWS installation instructions&lt;/a&gt;
-with the following three recommendations:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Make sure you include &lt;code&gt;/var/log/openvpnas.log&lt;/code&gt;, &lt;code&gt;/var/log/syslog&lt;/code&gt; and &lt;code&gt;/var/log/auth.log&lt;/code&gt; to the log
-collection.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;When asked what the log stream name should be, I recommend you use the newly-configured machine name
-for clarity.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;When asked about the timestamp format, choose to use a custom format and enter &lt;code&gt;%Y-%m-%dT%H:%M:%S%z&lt;/code&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Then, update &lt;code&gt;/etc/rsyslog.conf&lt;/code&gt; as per &lt;a href="http://serverfault.com/a/592120"&gt;these instructions&lt;/a&gt; and
-restart the rsyslog service:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;service rsyslog restart
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Finally, you'll need to enable the service to run via systemd (as &lt;code&gt;root&lt;/code&gt;):&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; awslogs
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;You should now see the new log groups on the AWS Console.&lt;/p&gt;
-&lt;p&gt;I would also like to suggest that you create a new file &lt;code&gt;/etc/logrotate.d/openvpnas&lt;/code&gt; with the following
-content:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;apt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;openvpnas&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="err"&gt;{&lt;/span&gt;
-  &lt;span class="n"&gt;rotate&lt;/span&gt; &lt;span class="mi"&gt;90&lt;/span&gt;
-  &lt;span class="n"&gt;daily&lt;/span&gt;
-  &lt;span class="n"&gt;compress&lt;/span&gt;
-  &lt;span class="n"&gt;missingok&lt;/span&gt;
-  &lt;span class="n"&gt;notifempty&lt;/span&gt;
-&lt;span class="err"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;h2&gt;Additional Recommendations&lt;/h2&gt;
-&lt;p&gt;A few security-minded tips that I would recommend you implement:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Ensure you close off SSH access to the OpenVPN box after you're done configuring it, by removing the
-applicable Security Group inbound rule. If you need in you can always do that through the VPN access
-itself later on. And if you lock yourself out, you can always allow it temporarily again on the Security
-Group if and when you need it.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;On the web admin interface, go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;SSL Settings&lt;/code&gt; and select &lt;code&gt;TLS 1.1&lt;/code&gt; as the minimum 
-for both the web server and OpenVPN server, as per 
-&lt;a href="https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet#Rule_-_Only_Support_Strong_Protocols"&gt;industry best practice&lt;/a&gt;.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;On the web admin interface, go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;Advanced VPN Settings&lt;/code&gt;. Under 
-&lt;code&gt;Additional OpenVPN Config Directives (Advanced)&lt;/code&gt;, replace &lt;code&gt;AES-128-CBC&lt;/code&gt; with &lt;code&gt;AES-256-CBC&lt;/code&gt; in both the
- client and server configuration directives for increased encryption security.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;</content><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://www.infoseczanshin.com/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
+&lt;/ul&gt;</content><category term="Tools"></category><category term="AWS"></category><category term="Linux"></category><category term="StrongSwan"></category></entry><entry><title>Using OpenMP with R packages in OS X</title><link href="https://www.infoseczanshin.com/using-openmp-with-r-packages-in-os-x.html" rel="alternate"></link><published>2016-07-21T18:01:00-03:00</published><updated>2016-07-21T18:01:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-07-21:/using-openmp-with-r-packages-in-os-x.html</id><summary type="html">&lt;p&gt;Using OpenMP to allow parallel computation in R packages on Mac OS X&lt;/p&gt;</summary><content type="html">&lt;p&gt;Lots of R packages have underlying implementations in C and C++, so they need to be compiled to
 function properly. But when you install a package in OS X you will probably get a pre-compiled version
 of said package from &lt;a href="https://cran.r-project.org/"&gt;CRAN&lt;/a&gt; that used their build environment and the
 default package options.&lt;/p&gt;
@@ -839,7 +811,7 @@ what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code
 the last step.&lt;/p&gt;
 &lt;p&gt;After all this, uninstall the R packages you want to with OpenMP with, and 
 &lt;a href="http://stackoverflow.com/questions/1474081/how-do-i-install-an-r-package-from-source"&gt;reinstall them from source&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://www.infoseczanshin.com/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
+&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="Tools"></category><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://www.infoseczanshin.com/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
 in Linux and Mac OS X environments. When I first found out about it, the idea of using JSON as a way to
 serialize and deserialize values between Python and R was beautifully simple and intuitive.&lt;/p&gt;
 &lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
@@ -966,7 +938,7 @@ out &lt;a href="https://github.com/asieira/SnakeCharmR/issues"&gt;GitHub issues&
 have had experience with compiling Rcpp packages that use external libraries on Windows, your help 
 will be much appreciated.&lt;/p&gt;
 &lt;p&gt;Many thanks to &lt;a href="https://twitter.com/hrbrmstr"&gt;Bob Rudis&lt;/a&gt; for his invaluable help in getting this 
-project going. &lt;/p&gt;</content><category term="R"></category><category term="Python"></category></entry><entry><title>In Memoriam: Lucas Eustaquio Gomes da Silva (August 27th 1982 - April 24th, 2016)</title><link href="https://www.infoseczanshin.com/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html" rel="alternate"></link><published>2016-04-24T19:22:00-03:00</published><updated>2016-04-24T19:22:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-04-24:/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</id><summary type="html">&lt;p&gt;Celebrating the life and achievements of an outstanding man.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Today myself and the rest of the Niddel team were devastated to learn that our dear friend 
+project going. &lt;/p&gt;</content><category term="Tools"></category><category term="R"></category><category term="Python"></category></entry><entry><title>In Memoriam: Lucas Eustaquio Gomes da Silva (August 27th 1982 - April 24th, 2016)</title><link href="https://www.infoseczanshin.com/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html" rel="alternate"></link><published>2016-04-24T19:22:00-03:00</published><updated>2016-04-24T19:22:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-04-24:/in-memoriam-lucas-eustaquio-gomes-da-silva-august-27th-1982-april-24th-2016.html</id><summary type="html">&lt;p&gt;Celebrating the life and achievements of an outstanding man.&lt;/p&gt;</summary><content type="html">&lt;p&gt;Today myself and the rest of the Niddel team were devastated to learn that our dear friend 
 &lt;a href="https://br.linkedin.com/in/lucas-eustaquio-gomes-da-silva-16522816"&gt;Lucas Eustaquio Gomes da Silva&lt;/a&gt;,
 our Senior Data Scientist since August 2013, has passed away after a brave battle against an aggressive form of 
 &lt;a href="http://kickingcancerass.blogspot.com.br/"&gt;cancer&lt;/a&gt;. &lt;/p&gt;
@@ -980,7 +952,7 @@ world loses an amazing human being, and one of its
 which was respected and cherished by his 
 &lt;a href="https://www.kaggle.com/forums/f/15/kaggle-forum/t/20388/data-scientist-hero"&gt;colleagues and peers&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;Rest in peace, Lucas. You will be missed. We will do our best to ensure your work lives on - that the dream
-you shared with us will be realized, whatever the odds.&lt;/p&gt;</content><category term="personal"></category></entry><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://www.infoseczanshin.com/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-13:/threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;A common misunderstanding that can lead to a lot of pain.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have recently participated in a 
+you shared with us will be realized, whatever the odds.&lt;/p&gt;</content><category term="Personal"></category><category term="personal"></category></entry><entry><title>Threat Intelligence Indicators are not Signatures</title><link href="https://www.infoseczanshin.com/threat-intelligence-indicators-are-not-signatures.html" rel="alternate"></link><published>2016-02-13T02:03:00-02:00</published><updated>2016-02-13T02:03:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-13:/threat-intelligence-indicators-are-not-signatures.html</id><summary type="html">&lt;p&gt;A common misunderstanding that can lead to a lot of pain.&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have recently participated in a 
 &lt;a href="https://www.blackhat.com/html/webcast/01212016-data-driven-threat-intelligence.html"&gt;Black Hat webcast&lt;/a&gt;
 with &lt;a href="https://www.twitter.com/bhaskar_vk"&gt;Bhaskar Karambelkar&lt;/a&gt;, which was sponsored by 
 &lt;a href="https://threatconnect.com/"&gt;ThreatConnect&lt;/a&gt;. This was related to the Black Hat 2015 session called 
@@ -1075,7 +1047,7 @@ computer-readable indicators.&lt;/p&gt;
 &lt;p&gt;I hope this article helps people realize that organizations need to put proper processes and/or automation in place to 
 overcome the problems identified above if they decide to use threat intelligence indicators for detection. Even though 
 threat intelligence indicators are really valuable allies to information security monitoring and DFIR initiatives, they 
-are not signatures and should be used with appropriate care.&lt;/p&gt;</content><category term="threat intelligence"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="https://www.infoseczanshin.com/test-data-to-develop-splunk-content.html" rel="alternate"></link><published>2016-02-02T17:40:00-02:00</published><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-02:/test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;Using Splunk eventgen to create sample events from different devices.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
+are not signatures and should be used with appropriate care.&lt;/p&gt;</content><category term="Opinions"></category><category term="threat intelligence"></category></entry><entry><title>Test Data to Develop Splunk Content</title><link href="https://www.infoseczanshin.com/test-data-to-develop-splunk-content.html" rel="alternate"></link><published>2016-02-02T17:40:00-02:00</published><updated>2016-02-02T17:40:00-02:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-02-02:/test-data-to-develop-splunk-content.html</id><summary type="html">&lt;p&gt;Using Splunk eventgen to create sample events from different devices.&lt;/p&gt;</summary><content type="html">&lt;p&gt;&lt;a href="http://splunk.com"&gt;Splunk&lt;/a&gt; is the SIEM platform I have been working the most with recently. It is a joy to work with 
 because it has embraced the development paradigm, and organizes standard and user-developed content into apps. And it 
 lets you write code in proper languages like Python or Java to process the data in ways that go beyond their own query 
 language.&lt;/p&gt;
@@ -1128,4 +1100,4 @@ the eventgen app. Mark and unmark the &lt;code&gt;Enable ./bin/eventgen.py&lt;/c
 &lt;/ul&gt;
 &lt;p&gt;Once this is done, eventgen will inspect all other installed apps it can access (hence the permissions step above) and
 generate fake events for them according to their configurations, usually directly to the &lt;code&gt;main&lt;/code&gt; index. No easy way to
-choose which apps to generate events from at this time, unfortunately.&lt;/p&gt;</content><category term="splunk"></category><category term="siem"></category></entry></feed>
+choose which apps to generate events from at this time, unfortunately.&lt;/p&gt;</content><category term="Tools"></category><category term="splunk"></category><category term="siem"></category></entry></feed>

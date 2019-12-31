@@ -53,7 +53,7 @@ what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code
 the last step.&lt;/p&gt;
 &lt;p&gt;After all this, uninstall the R packages you want to with OpenMP with, and 
 &lt;a href="http://stackoverflow.com/questions/1474081/how-do-i-install-an-r-package-from-source"&gt;reinstall them from source&lt;/a&gt;.&lt;/p&gt;
-&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://www.infoseczanshin.com/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
+&lt;p&gt;That's it! Hopefully you will now have a working OpenMP-enabled R package to work with.&lt;/p&gt;</content><category term="Tools"></category><category term="R"></category></entry><entry><title>Introducing SnakeCharmR</title><link href="https://www.infoseczanshin.com/introducing-snakecharmr.html" rel="alternate"></link><published>2016-06-13T19:17:00-03:00</published><updated>2016-06-13T19:17:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2016-06-13:/introducing-snakecharmr.html</id><summary type="html">&lt;p&gt;A modern R package to allow Python to be called from R&lt;/p&gt;</summary><content type="html">&lt;p&gt;I have been using &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; for some time 
 in Linux and Mac OS X environments. When I first found out about it, the idea of using JSON as a way to
 serialize and deserialize values between Python and R was beautifully simple and intuitive.&lt;/p&gt;
 &lt;p&gt;However, over time I realized &lt;a href="https://cran.r-project.org/web/packages/rPython/index.html"&gt;rPython&lt;/a&gt; 
@@ -180,4 +180,4 @@ out &lt;a href="https://github.com/asieira/SnakeCharmR/issues"&gt;GitHub issues&
 have had experience with compiling Rcpp packages that use external libraries on Windows, your help 
 will be much appreciated.&lt;/p&gt;
 &lt;p&gt;Many thanks to &lt;a href="https://twitter.com/hrbrmstr"&gt;Bob Rudis&lt;/a&gt; for his invaluable help in getting this 
-project going. &lt;/p&gt;</content><category term="R"></category><category term="Python"></category></entry></feed>
+project going. &lt;/p&gt;</content><category term="Tools"></category><category term="R"></category><category term="Python"></category></entry></feed>

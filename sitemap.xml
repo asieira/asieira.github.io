@@ -5,29 +5,36 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://www.infoseczanshin.com/</loc>
-<lastmod>2019-07-31T11:00:29-00:00</lastmod>
+<lastmod>2019-12-30T21:27:19-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://www.infoseczanshin.com/archives.html</loc>
-<lastmod>2019-07-31T11:00:29-00:00</lastmod>
+<lastmod>2019-12-30T21:27:19-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://www.infoseczanshin.com/tags.html</loc>
-<lastmod>2019-07-31T11:00:29-00:00</lastmod>
+<lastmod>2019-12-30T21:27:19-00:00</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://www.infoseczanshin.com/categories.html</loc>
-<lastmod>2019-07-31T11:00:29-00:00</lastmod>
+<lastmod>2019-12-30T21:27:19-00:00</lastmod>
 <changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html</loc>
+<lastmod>2019-12-30T19:51:00-03:00</lastmod>
+<changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
 
@@ -48,13 +55,6 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
 <loc>https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html</loc>
 <lastmod>2017-03-30T18:06:00-03:00</lastmod>
-<changefreq>monthly</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://www.infoseczanshin.com/using-openvpn-access-server-to-access-aws-vpcs.html</loc>
-<lastmod>2017-03-16T09:10:00-03:00</lastmod>
 <changefreq>monthly</changefreq>
 <priority>0.5</priority>
 </url>
@@ -117,14 +117,28 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://www.infoseczanshin.com/category/tools.html</loc>
-<lastmod>2017-03-30T18:06:00-03:06</lastmod>
+<lastmod>2019-12-30T19:51:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
 
 <url>
 <loc>https://www.infoseczanshin.com/tag/aws.html</loc>
-<lastmod>2019-07-30T12:00:00-03:06</lastmod>
+<lastmod>2019-12-30T19:51:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://www.infoseczanshin.com/tag/linux.html</loc>
+<lastmod>2019-12-30T19:51:00-03:06</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.5</priority>
+</url>
+
+<url>
+<loc>https://www.infoseczanshin.com/tag/openvpn.html</loc>
+<lastmod>2019-12-30T19:51:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -158,22 +172,8 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 </url>
 
 <url>
-<loc>https://www.infoseczanshin.com/tag/linux.html</loc>
-<lastmod>2017-03-30T18:06:00-03:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
 <loc>https://www.infoseczanshin.com/tag/strongswan.html</loc>
 <lastmod>2017-03-30T18:06:00-03:06</lastmod>
-<changefreq>daily</changefreq>
-<priority>0.5</priority>
-</url>
-
-<url>
-<loc>https://www.infoseczanshin.com/tag/openvpn.html</loc>
-<lastmod>2017-03-16T09:10:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
@@ -222,7 +222,7 @@ xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
 <loc>https://www.infoseczanshin.com/author/alexandre-sieira.html</loc>
-<lastmod>2019-07-30T12:00:00-03:06</lastmod>
+<lastmod>2019-12-30T19:51:00-03:06</lastmod>
 <changefreq>daily</changefreq>
 <priority>0.5</priority>
 </url>
