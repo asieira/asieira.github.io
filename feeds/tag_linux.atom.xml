@@ -38,7 +38,7 @@ strong technical background.&lt;/p&gt;
 &lt;a href="https://openvpn.net/index.php/access-server/pricing.html"&gt;licenses&lt;/a&gt; for the OpenVPN
 Access Server if you plan to have more than two client connections at a time. But I find them
 to be reasonably priced.&lt;/p&gt;
-&lt;p&gt;This post was recently updated based on a fresh install using OpenVPN Access Server 3.7.5 and is 
+&lt;p&gt;This post was recently updated based on a fresh install using OpenVPN Access Server 2.7.5 and is 
 meant as a rough but coherent guide to the external references I used to get this working. 
 Hopefully it will save someone some time.&lt;/p&gt;
 &lt;h2&gt;OpenVPN Access Server Instance&lt;/h2&gt;
