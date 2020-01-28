@@ -272,7 +272,22 @@ for both the web server and OpenVPN server, as per
 &lt;li&gt;
 &lt;p&gt;Harden the operating system and make sure to keep install security updates as they become available.&lt;/p&gt;
 &lt;/li&gt;
-&lt;/ul&gt;</content><category term="Tools"></category><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
+&lt;li&gt;
+&lt;p&gt;Secure the &lt;a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html"&gt;AWS instance metadata service&lt;/a&gt; 
+by preventing the &lt;code&gt;openvpn&lt;/code&gt; and other users that don't need it from accessing it:&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install iptables-persistent
+sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner cwagent -j ACCEPT
+sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner ssm-user -j ACCEPT
+sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner root -j ACCEPT
+sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -j REJECT
+sudo /etc/init.d/netfilter-persistent save
+&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;You can remove the line allowing &lt;code&gt;root&lt;/code&gt; if you are not using the certbot Route53 automated certificate renewal, or maybe
+even create a specific user to run that task.&lt;/p&gt;</content><category term="Tools"></category><category term="AWS"></category><category term="Linux"></category><category term="OpenVPN"></category></entry><entry><title>Connecting AWS VPCs with StrongSwan</title><link href="https://www.infoseczanshin.com/connecting-aws-vpcs-with-strongswan.html" rel="alternate"></link><published>2017-03-30T18:06:00-03:00</published><updated>2017-03-30T18:06:00-03:00</updated><author><name>Alexandre Sieira</name></author><id>tag:www.infoseczanshin.com,2017-03-30:/connecting-aws-vpcs-with-strongswan.html</id><summary type="html">&lt;p&gt;Establishing a site-to-site IPsec VPN between VPCs in different regions on a budget&lt;/p&gt;</summary><content type="html">&lt;p&gt;On my &lt;a href="/using-openvpn-access-server-to-access-aws-vpcs.html"&gt;previous post&lt;/a&gt;
 I covered how to allow client-to-site connectivity to an AWS 
 &lt;a href="https://aws.amazon.com/documentation/vpc/"&gt;VPC&lt;/a&gt; environment.&lt;/p&gt;
 &lt;p&gt;On this post I decided to continue exploring AWS VPC connectivity and talk about how to
