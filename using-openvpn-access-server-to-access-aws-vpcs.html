@@ -41,7 +41,7 @@ apt-get install python3-certbot-dns-route53
 <span class="s">/usr/local/openvpn_as/scripts/sacli stop</span>
 <span class="s">EOF</span>
 
-chmod a+x /etc/letsencrypt/renewal-hooks/pre/start_openvpn.sh
+chmod a+x /etc/letsencrypt/renewal-hooks/pre/stop_openvpn.sh
 
 cat &gt; /etc/letsencrypt/renewal-hooks/post/start_openvpn.sh <span class="s">&lt;&lt; EOF</span>
 <span class="s">#!/bin/sh</span>

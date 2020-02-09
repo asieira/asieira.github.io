@@ -129,7 +129,7 @@ certbot uses when creating and loading certs (pre, deploy and post hooks) that I
 &lt;span class="s"&gt;/usr/local/openvpn_as/scripts/sacli stop&lt;/span&gt;
 &lt;span class="s"&gt;EOF&lt;/span&gt;
 
-chmod a+x /etc/letsencrypt/renewal-hooks/pre/start_openvpn.sh
+chmod a+x /etc/letsencrypt/renewal-hooks/pre/stop_openvpn.sh
 
 cat &amp;gt; /etc/letsencrypt/renewal-hooks/post/start_openvpn.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
 &lt;span class="s"&gt;#!/bin/sh&lt;/span&gt;
