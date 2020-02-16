@@ -61,11 +61,11 @@ so that if you stop and restart it the IP address won't change.&lt;/p&gt;
 &lt;h2&gt;Updates, Updates and More Updates&lt;/h2&gt;
 &lt;p&gt;The first thing you'll want to do after you have finished the SSH questions and are logged
 into the instance is to fully update it and then reboot it by running the following commands:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo su -
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo su -
 apt-get update
 apt-get dist-upgrade
 shutdown -r now
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Please don't skip the reboot, so that all updates actually take effect, such as updates to the
@@ -80,18 +80,18 @@ and close access via SSH entirely.&lt;/p&gt;
 certificates with automated renewal.&lt;/p&gt;
 &lt;p&gt;First, as &lt;code&gt;root&lt;/code&gt;, &lt;a href="https://certbot.eff.org/lets-encrypt/ubuntubionic-other"&gt;install certbot&lt;/a&gt; using DNS validation
 through Route53:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install software-properties-common
-sudo add-apt-repository universe
-sudo add-apt-repository ppa:certbot/certbot
-sudo apt-get update
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apt-get install software-properties-common
+add-apt-repository universe
+add-apt-repository ppa:certbot/certbot
+apt-get update
 apt-get install python3-certbot-dns-route53
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Then make sure you append a new policy to the OpenVPN instance role with the 
 &lt;a href="https://certbot-dns-route53.readthedocs.io/en/stable/"&gt;necessary permissions&lt;/a&gt;, replacing &lt;code&gt;YOURHOSTEDZONEID&lt;/code&gt; with 
 the correct zone ID:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="p"&gt;{&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="p"&gt;{&lt;/span&gt;
     &lt;span class="nt"&gt;&amp;quot;Version&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;2012-10-17&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
     &lt;span class="nt"&gt;&amp;quot;Id&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="s2"&gt;&amp;quot;certbot-dns-route53 sample policy&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt;
     &lt;span class="nt"&gt;&amp;quot;Statement&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;
@@ -116,7 +116,7 @@ the correct zone ID:&lt;/p&gt;
         &lt;span class="p"&gt;}&lt;/span&gt;
     &lt;span class="p"&gt;]&lt;/span&gt;
 &lt;span class="p"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Take this time to also create an &lt;code&gt;A&lt;/code&gt; record set in Route53 that maps the hostname of your OpenVPN server to the
@@ -124,7 +124,7 @@ Elastic IP address you assigned to it in the previous section.&lt;/p&gt;
 &lt;p&gt;In order to be ready for automated renewal later on, let's do this by creating three scripts on specific paths that 
 certbot uses when creating and loading certs (pre, deploy and post hooks) that I adapted from 
 &lt;a href="https://www.sideras.net/lets-encrypt-https-certificates-for-openvpn-as-access-server/"&gt;elsewhere&lt;/a&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;cat &amp;gt; /etc/letsencrypt/renewal-hooks/pre/stop_openvpn.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;cat &amp;gt; /etc/letsencrypt/renewal-hooks/pre/stop_openvpn.sh &lt;span class="s"&gt;&amp;lt;&amp;lt; EOF&lt;/span&gt;
 &lt;span class="s"&gt;#!/bin/sh&lt;/span&gt;
 &lt;span class="s"&gt;/usr/local/openvpn_as/scripts/sacli stop&lt;/span&gt;
 &lt;span class="s"&gt;EOF&lt;/span&gt;
@@ -146,20 +146,20 @@ cat &amp;gt; /etc/letsencrypt/renewal-hooks/deploy/load_openvpn.sh &lt;span clas
 &lt;span class="s"&gt;EOF&lt;/span&gt;
 
 chmod a+x /etc/letsencrypt/renewal-hooks/deploy/load_openvpn.sh
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Please make sure you replace &lt;code&gt;openvpn.example.com&lt;/code&gt; in the code above with the actual hostname you chose for your 
 OpenVPN server.&lt;/p&gt;
 &lt;p&gt;Then, request a certbot certificate by issuing the following command and following the on-screen instructions:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;certbot certonly --dns-route53 -d openvpn.example.com
-&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;certbot certonly --dns-route53 -d openvpn.example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;At this point, as soon as the OpenVPN service comes back up it should be using the newly generated certificate.&lt;/p&gt;
 &lt;p&gt;Finally, create a regular task executed twice a day by running &lt;code&gt;crontab -e&lt;/code&gt; as &lt;code&gt;root&lt;/code&gt; and entering the following new entry:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;0 1,13 * * * /usr/bin/certbot renew --quiet&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;0 1,13 * * * /usr/bin/certbot renew --quiet&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Please choose an arbitrary number between 1 and 60 and replace the first &lt;code&gt;0&lt;/code&gt; in the above line. Also choose 
@@ -208,57 +208,47 @@ example). In this page, they'll the given the choice to download a connection cl
 can import into an existing client. But they will also be displayed the QR code they'll scan using
 Google Authenticator. Once they do that, everything should be good to go.&lt;/p&gt;
 &lt;h2&gt;CloudWatch Logs Agent&lt;/h2&gt;
-&lt;p&gt;Next let's configure the &lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;CloudWatch Logs Agent&lt;/a&gt;
-so that the OpenVPN Server logs are centralized and easy to query if necessary, and also protected from any
-attackers that might gain access to the server.&lt;/p&gt;
-&lt;p&gt;Firstly, a minor adjustment is needed to allow the agent installation to go properly. The provided AWS
-installation script checks &lt;code&gt;/etc/issue&lt;/code&gt; to determine which Linux distribution the machine uses. And OpenVPN
-Access Server has a custom string in that file. So we'll need to edit it to make sure the first line starts 
-with &lt;code&gt;Ubuntu&lt;/code&gt; or else the script will refuse to run.&lt;/p&gt;
-&lt;p&gt;I also recommend assigning the machine its proper hostname by issuing the following command as &lt;code&gt;root&lt;/code&gt;:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;hostname openvpn.example.com
-&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If you are using System Manager, then at this point you should have the 
+&lt;a href="https://aws.amazon.com/pt/blogs/aws/new-amazon-cloudwatch-agent-with-aws-systems-manager-integration-unified-metrics-log-collection-for-linux-windows/"&gt;Unified CloudWatch Agent&lt;/a&gt; 
+installed at the machine. We can use it to ensure the OpenVPN Server logs are centralized and easy to query if necessary,
+and also protected from any attackers that might gain access to the server.&lt;/p&gt;
+&lt;p&gt;Firstly, I recommend assigning the machine its proper hostname by issuing the following command as &lt;code&gt;root&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;hostname openvpn.example.com
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Then, make sure you edit &lt;code&gt;/etc/hostname&lt;/code&gt; and &lt;code&gt;/etc/hosts&lt;/code&gt; to make sure they also match the the full hostname.&lt;/p&gt;
-&lt;p&gt;Finally, you can then execute the 
-&lt;a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/QuickStartEC2Instance.html"&gt;official AWS installation instructions&lt;/a&gt;
-with the following three recommendations:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;Make sure you include &lt;code&gt;/var/log/openvpnas.log&lt;/code&gt;, &lt;code&gt;/var/log/syslog&lt;/code&gt; and &lt;code&gt;/var/log/auth.log&lt;/code&gt; to the log
+&lt;p&gt;Finally, you can then execute the agent configuration wizard by running the following command as root:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;p&gt;The options will be saved at &lt;code&gt;/opt/aws/amazon-cloudwatch-agent/bin/config.json&lt;/code&gt; which you can always go and edit
+manually later if needed.&lt;/p&gt;
+&lt;p&gt;A few pointers:
+* Make sure you include &lt;code&gt;/var/log/openvpnas.log&lt;/code&gt;, &lt;code&gt;/var/log/syslog&lt;/code&gt; and &lt;code&gt;/var/log/auth.log&lt;/code&gt; to the log
 collection.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;When asked what the log stream name should be, I recommend you use the newly-configured machine name
-for clarity.&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;When asked about the timestamp format, choose to use a custom format and enter &lt;code&gt;%Y-%m-%dT%H:%M:%S%z&lt;/code&gt;.&lt;/p&gt;
-&lt;/li&gt;
+&lt;ul&gt;
+&lt;li&gt;When asked what the log stream name should be, I recommend you use the newly-configured machine name
+for clarity.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Then, update &lt;code&gt;/etc/rsyslog.conf&lt;/code&gt; as per &lt;a href="http://serverfault.com/a/592120"&gt;these instructions&lt;/a&gt; and
 restart the rsyslog service:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;service rsyslog restart
-&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;p&gt;Finally, you'll need to enable the service to run via systemd (as &lt;code&gt;root&lt;/code&gt;):&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; awslogs
-&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;service rsyslog restart
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;You should now see the new log groups on the AWS Console.&lt;/p&gt;
 &lt;p&gt;I would also like to suggest that you create a new file &lt;code&gt;/etc/logrotate.d/openvpnas&lt;/code&gt; with the following
 content:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="err"&gt;/var/log/apt/openvpnas.log {&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="err"&gt;/var/log/openvpnas.log {&lt;/span&gt;
 &lt;span class="err"&gt;  rotate 90&lt;/span&gt;
 &lt;span class="err"&gt;  daily&lt;/span&gt;
 &lt;span class="err"&gt;  compress&lt;/span&gt;
 &lt;span class="err"&gt;  missingok&lt;/span&gt;
 &lt;span class="err"&gt;  notifempty&lt;/span&gt;
 &lt;span class="err"&gt;}&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h2&gt;Additional Recommendations&lt;/h2&gt;
@@ -277,13 +267,13 @@ for both the web server and OpenVPN server, as per
 by preventing the &lt;code&gt;openvpn&lt;/code&gt; and other users that don't need it from accessing it:&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;sudo apt-get install iptables-persistent
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;sudo apt-get install iptables-persistent
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner cwagent -j ACCEPT
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner ssm-user -j ACCEPT
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner root -j ACCEPT
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -j REJECT
 sudo /etc/init.d/netfilter-persistent save
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;You can remove the line allowing &lt;code&gt;root&lt;/code&gt; if you are not using the certbot Route53 automated certificate renewal, or maybe
@@ -567,7 +557,7 @@ the end-to-end communications between machines on different VPCs through the VPN
  configuration steps.&lt;/p&gt;
 &lt;p&gt;Ensure that &lt;code&gt;/etc/sysctl.conf&lt;/code&gt; contains the following lines and then force them to be loaded by
 running &lt;code&gt;sysctl -p /etc/sysctl.conf&lt;/code&gt; or by rebooting:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;net.ipv4.ip_forward &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;net.ipv4.ip_forward &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 net.ipv4.conf.all.send_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
 net.ipv4.conf.default.send_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
 net.ipv4.tcp_max_syn_backlog &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1280&lt;/span&gt;
@@ -585,36 +575,36 @@ net.ipv4.tcp_syncookies &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&
 net.ipv4.conf.all.rp_filter &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 net.ipv4.conf.default.rp_filter &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 net.ipv4.tcp_mtu_probing &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;As a side note, it is strongly recommended that you include &lt;code&gt;net.ipv4.tcp_mtu_probing = 1&lt;/code&gt; on the 
 &lt;code&gt;sysctl.conf&lt;/code&gt; of all of your Linux EC2 instances, since they use jumbo frames by default.&lt;/p&gt;
 &lt;p&gt;Let's make sure the machine is fully patched, that we can use EPEL and that we install StrongSwan
 by issuing the following commands:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install epel-release
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yum install epel-release
 yum repolist
 yum update
 yum install strongswan
 systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; strongswan
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;In order to ensure the cryptography and logging work properly, the system needs to have proper time
 synchronization. Make sure &lt;a href="https://en.wikipedia.org/wiki/Network_Time_Protocol"&gt;NTP&lt;/a&gt; is installed and 
 configured to run on system start:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;yum install ntp
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yum install ntp
 systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; ntpd
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Replace the &lt;code&gt;server&lt;/code&gt; configuration entries in &lt;code&gt;/etc/ntp.conf&lt;/code&gt; so the AWS recommended NTP 
 server pool is used:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;server &lt;span class="m"&gt;0&lt;/span&gt;.amazon.pool.ntp.org iburst
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;server &lt;span class="m"&gt;0&lt;/span&gt;.amazon.pool.ntp.org iburst
 server &lt;span class="m"&gt;1&lt;/span&gt;.amazon.pool.ntp.org iburst
 server &lt;span class="m"&gt;2&lt;/span&gt;.amazon.pool.ntp.org iburst
 server &lt;span class="m"&gt;3&lt;/span&gt;.amazon.pool.ntp.org iburst
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Finally, restart the NTP service with &lt;code&gt;systemctl restart ntpd&lt;/code&gt; and check that it is working properly 
@@ -624,36 +614,36 @@ with &lt;code&gt;ntpq -p&lt;/code&gt;.&lt;/p&gt;
 those keys and associate them with the servers in the StrongSwan configuration.&lt;/p&gt;
 &lt;p&gt;On each StrongSwan instance, create its own RSA key. This is how you would do it on the us-east-1
 StrongSwan instance:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /etc/strongswan/ipsec.d/private/
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /etc/strongswan/ipsec.d/private/
 openssl genrsa -out us-east-1.key &lt;span class="m"&gt;4096&lt;/span&gt;
 chmod og-r us-east-1.key
 openssl rsa -in us-east-1.key -pubout &amp;gt; ../certs/us-east-1.pub
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Once you do that, you need to edit &lt;code&gt;/etc/strongswan/ipsec.secrets&lt;/code&gt; to let StrongSwan know what to
 do with the private key. Add a line to that file that associates each instance's own elastic IP address
 to the key file. Assuming the elastic IP address of the us-east-1 StrongSwan instance is &lt;code&gt;1.2.3.4&lt;/code&gt;,
 this is what that line would look like:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4 : RSA us-east-1.key
-&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4 : RSA us-east-1.key
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Then, you copy each StrongSwan instance's &lt;code&gt;.pub&lt;/code&gt; file to the &lt;code&gt;/etc/strongswan/ipsec.d/certs&lt;/code&gt; 
 directory of each of the other StrongSwan instances. In our example, if you were on the us-east-1 
 instance you would see something like this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;$ find /etc/strongswan/ipsec.d/ -name *.key
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ find /etc/strongswan/ipsec.d/ -name *.key
 /etc/strongswan/ipsec.d/private/us-east-1.key
 $ find /etc/strongswan/ipsec.d/ -name *.pub
 /etc/strongswan/ipsec.d/certs/us-east-1.pub
 /etc/strongswan/ipsec.d/certs/us-east-2.pub
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Finally, you configure &lt;code&gt;/etc/strongswan/ipsec.conf&lt;/code&gt; to tie it all together. This is what the
 configuration file would look like the the elastic IP for the us-east-1 and us-east-2 instances
 were 1.2.3.4 and 2.3.4.5, respectively:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config setup
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;config setup
     &lt;span class="c1"&gt;# strictcrlpolicy=yes&lt;/span&gt;
     &lt;span class="c1"&gt;# uniqueids = no&lt;/span&gt;
 
@@ -676,13 +666,13 @@ conn us-east-2
     &lt;span class="nv"&gt;rightsubnet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;172&lt;/span&gt;.31.0.0/16
     &lt;span class="nv"&gt;rightrsasigkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;us-east-2.pub
     &lt;span class="nv"&gt;auto&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;start
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Keep in mind that &lt;code&gt;left&lt;/code&gt; in StrongSwan parlance means the side of the VPN that is local to 
 the instance you are configuring, and &lt;code&gt;right&lt;/code&gt; is the remote side. So the configuration file on
 the us-east-2 instance would look like this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;config setup
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;config setup
     &lt;span class="c1"&gt;# strictcrlpolicy=yes&lt;/span&gt;
     &lt;span class="c1"&gt;# uniqueids = no&lt;/span&gt;
 
@@ -705,7 +695,7 @@ conn us-east-1
     &lt;span class="nv"&gt;rightsubnet&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;172&lt;/span&gt;.16.0.0/16
     &lt;span class="nv"&gt;rightrsasigkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;us-east-1.pub
     &lt;span class="nv"&gt;auto&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;start
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Please review the StrongSwan 
@@ -796,8 +786,8 @@ at its &lt;a href="https://clang-omp.github.io/"&gt;website&lt;/a&gt; the projec
 in homebrew anymore, so that is a dead end.&lt;/p&gt;
 &lt;p&gt;What finally worked for me was to install GCC 6 using homebrew, and using it to compile the R packages
 with OpenMP support. This is how you do it using homebrew:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;brew install gcc --without-multilib
-&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;brew install gcc --without-multilib
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;It's important to include &lt;code&gt;--without-multilib&lt;/code&gt; since it apparently 
@@ -806,7 +796,7 @@ OpenMP. Unless you're cross-compiling to different architectures you probably wo
 &lt;p&gt;If you already had gcc installed with homebrew, just replace &lt;code&gt;install&lt;/code&gt; above with &lt;code&gt;reinstall&lt;/code&gt;.&lt;/p&gt;
 &lt;p&gt;After you do that, you'll notice that gcc executables should have been linked to &lt;code&gt;/usr/local/bin&lt;/code&gt;. Next, 
 what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code&gt; to reference them:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gcc-6
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nv"&gt;CC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/gcc-6
 &lt;span class="nv"&gt;CXX&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;CXX1X&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
 &lt;span class="nv"&gt;CXX11&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/usr/local/bin/g++-6
@@ -819,7 +809,7 @@ what you'll need to do is to create (or edit) &lt;code&gt;~/.R/Makevars&lt;/code
 &lt;span class="nv"&gt;SHLIB_OPENMP_CXXFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
 &lt;span class="nv"&gt;SHLIB_OPENMP_FCFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
 &lt;span class="nv"&gt;SHLIB_OPENMP_FFLAGS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;-fopenmp
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Make sure you adjust the major version on the executable file names to match what homebrew installed in 
@@ -857,9 +847,9 @@ much as possible, including &lt;a href="https://travis-ci.org/asieira/SnakeCharm
 to work with it. Most of them will be related to the differences between RJSONIO and jsonlite.&lt;/p&gt;
 &lt;h2&gt;Installation&lt;/h2&gt;
 &lt;p&gt;The package has not yet been submitted to CRAN, so currently this is how you install it:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;devtools&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;devtools&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;install_github&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;asieira/SnakeCharmR&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;p&gt;Please refer to the &lt;a href="https://github.com/asieira/SnakeCharmR/blob/master/README.md"&gt;README&lt;/a&gt; for more details
@@ -878,37 +868,37 @@ until overwritten by another operation.&lt;/p&gt;
 &lt;p&gt;Handling of strings with single quotes:&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rPython&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rPython&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;python.assign&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
   &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;lt;string&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="m"&gt;2&lt;/span&gt;
     &lt;span class="n"&gt;a&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s"&gt;&amp;#39; [ &amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="err"&gt; ] &amp;#39;&lt;/span&gt;
                  &lt;span class="n"&gt;^&lt;/span&gt;
 &lt;span class="n"&gt;SyntaxError&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;EOL&lt;/span&gt; &lt;span class="n"&gt;while&lt;/span&gt; &lt;span class="n"&gt;scanning&lt;/span&gt; &lt;span class="n"&gt;string&lt;/span&gt; &lt;span class="n"&gt;literal&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;SnakeCharmR&lt;/span&gt; &lt;span class="n"&gt;v1.0.2&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="n"&gt;Integration&lt;/span&gt;
 &lt;span class="n"&gt;Contribute&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;submit&lt;/span&gt; &lt;span class="n"&gt;issues&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;://&lt;/span&gt;&lt;span class="n"&gt;github.com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;asieira&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;py.assign&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;py.get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;#39;&amp;quot;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;ul&gt;
 &lt;li&gt;Handling of strings with unicode values:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rPython&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rPython&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;python.assign&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;áéíóú&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;python.get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;\xe1\xe9\xed\xf3\xfa&amp;quot;&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;Encoding&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;python.get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;unknown&amp;quot;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;SnakeCharmR&lt;/span&gt; &lt;span class="n"&gt;v1.0.2&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="n"&gt;Integration&lt;/span&gt;
 &lt;span class="n"&gt;Contribute&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;submit&lt;/span&gt; &lt;span class="n"&gt;issues&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;://&lt;/span&gt;&lt;span class="n"&gt;github.com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;asieira&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;py.assign&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;áéíóú&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -916,22 +906,22 @@ until overwritten by another operation.&lt;/p&gt;
 &lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;áéíóú&amp;quot;&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;Encoding&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="nf"&gt;py.get&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;))&lt;/span&gt;
 &lt;span class="n"&gt;[1]&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;UTF-8&amp;quot;&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;ul&gt;
 &lt;li&gt;Improved exception handling, which in &lt;a href="https://github.com/asieira/SnakeCharmR"&gt;SnakeCharmR&lt;/a&gt; now 
 includes a full stack trace to help debugging errors that happen in Python:&lt;/li&gt;
 &lt;/ul&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rPython&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;rPython&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;python.exec&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;def a():\n    return b()&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;python.exec&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;def b():\n    raise Exception(&amp;#39;uh oh&amp;#39;)&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;python.call&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;a&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;Error&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="nf"&gt;python.exec&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;python.command&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;uh&lt;/span&gt; &lt;span class="n"&gt;oh&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;library&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
 &lt;span class="n"&gt;SnakeCharmR&lt;/span&gt; &lt;span class="n"&gt;v1.0.2&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt; &lt;span class="n"&gt;R&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;Python&lt;/span&gt; &lt;span class="n"&gt;Integration&lt;/span&gt;
 &lt;span class="n"&gt;Contribute&lt;/span&gt; &lt;span class="n"&gt;and&lt;/span&gt; &lt;span class="n"&gt;submit&lt;/span&gt; &lt;span class="n"&gt;issues&lt;/span&gt; &lt;span class="n"&gt;at&lt;/span&gt; &lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="o"&gt;://&lt;/span&gt;&lt;span class="n"&gt;github.com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;asieira&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;SnakeCharmR&lt;/span&gt;
 &lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="nf"&gt;py.exec&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="s"&gt;&amp;quot;def a():\n    return b()&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
@@ -943,7 +933,7 @@ includes a full stack trace to help debugging errors that happen in Python:&lt;/
   &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;lt;string&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;a&lt;/span&gt;
   &lt;span class="n"&gt;File&lt;/span&gt; &lt;span class="s"&gt;&amp;quot;&amp;lt;string&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;line&lt;/span&gt; &lt;span class="m"&gt;3&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;in&lt;/span&gt; &lt;span class="n"&gt;b&lt;/span&gt;
 &lt;span class="n"&gt;Exception&lt;/span&gt;&lt;span class="o"&gt;:&lt;/span&gt; &lt;span class="n"&gt;uh&lt;/span&gt; &lt;span class="n"&gt;oh&lt;/span&gt;
-&lt;/pre&gt;&lt;/div&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
 &lt;h2&gt;Future Improvements&lt;/h2&gt;
