@@ -218,8 +218,9 @@ and also protected from any attackers that might gain access to the server.&lt;/
 
 
 &lt;p&gt;Then, make sure you edit &lt;code&gt;/etc/hostname&lt;/code&gt; and &lt;code&gt;/etc/hosts&lt;/code&gt; to make sure they also match the the full hostname.&lt;/p&gt;
-&lt;p&gt;Finally, you can then execute the agent configuration wizard by running the following command as root:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard 
+&lt;p&gt;Finally, you can install &lt;code&gt;collectd&lt;/code&gt; and then execute the agent configuration wizard by running the following command as root:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;opt-get install collectd
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 
@@ -229,8 +230,13 @@ manually later if needed.&lt;/p&gt;
 * Make sure you include &lt;code&gt;/var/log/openvpnas.log&lt;/code&gt;, &lt;code&gt;/var/log/syslog&lt;/code&gt; and &lt;code&gt;/var/log/auth.log&lt;/code&gt; to the log
 collection.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;When asked what the log stream name should be, I recommend you use the newly-configured machine name
-for clarity.&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;When asked what the log stream name should be, I recommend you use the newly-configured machine name
+for clarity.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Set the service user as &lt;code&gt;cwagent&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Then, update &lt;code&gt;/etc/rsyslog.conf&lt;/code&gt; as per &lt;a href="http://serverfault.com/a/592120"&gt;these instructions&lt;/a&gt; and
 restart the rsyslog service:&lt;/p&gt;
@@ -255,7 +261,7 @@ content:&lt;/p&gt;
 &lt;p&gt;A few security-minded tips that I would recommend you implement:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;
-&lt;p&gt;On the web admin interface, go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;SSL Settings&lt;/code&gt; and select &lt;code&gt;TLS 1.2&lt;/code&gt; as the minimum 
+&lt;p&gt;On the web admin interface, go to &lt;code&gt;Configuration&lt;/code&gt; &amp;nbsp;&amp;rarr;&amp;nbsp; &lt;code&gt;TLS Settings&lt;/code&gt; and select &lt;code&gt;TLS 1.2&lt;/code&gt; as the minimum 
 for both the web server and OpenVPN server, as per 
 &lt;a href="https://www.owasp.org/index.php/Transport_Layer_Protection_Cheat_Sheet#Rule_-_Only_Support_Strong_Protocols"&gt;industry best practice&lt;/a&gt;.&lt;/p&gt;
 &lt;/li&gt;
@@ -271,6 +277,7 @@ by preventing the &lt;code&gt;openvpn&lt;/code&gt; and other users that don't ne
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner cwagent -j ACCEPT
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner ssm-user -j ACCEPT
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -m owner --uid-owner root -j ACCEPT
+sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -j LOG --log-prefix &lt;span class="s2"&gt;&amp;quot;iptables-metadata-dropped&amp;quot;&lt;/span&gt; --log-level &lt;span class="m"&gt;4&lt;/span&gt;
 sudo iptables -A OUTPUT -d &lt;span class="m"&gt;169&lt;/span&gt;.254.169.254 -p tcp -j REJECT
 sudo /etc/init.d/netfilter-persistent save
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
