@@ -219,7 +219,7 @@ and also protected from any attackers that might gain access to the server.&lt;/
 
 &lt;p&gt;Then, make sure you edit &lt;code&gt;/etc/hostname&lt;/code&gt; and &lt;code&gt;/etc/hosts&lt;/code&gt; to make sure they also match the the full hostname.&lt;/p&gt;
 &lt;p&gt;Finally, you can install &lt;code&gt;collectd&lt;/code&gt; and then execute the agent configuration wizard by running the following command as root:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;opt-get install collectd
+&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;apt-get install collectd
 /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-config-wizard 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
