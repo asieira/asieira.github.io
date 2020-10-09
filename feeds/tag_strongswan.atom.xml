@@ -143,7 +143,7 @@ the end-to-end communications between machines on different VPCs through the VPN
  configuration steps.&lt;/p&gt;
 &lt;p&gt;Ensure that &lt;code&gt;/etc/sysctl.conf&lt;/code&gt; contains the following lines and then force them to be loaded by
 running &lt;code&gt;sysctl -p /etc/sysctl.conf&lt;/code&gt; or by rebooting:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;net.ipv4.ip_forward &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;net.ipv4.ip_forward &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 net.ipv4.conf.all.send_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
 net.ipv4.conf.default.send_redirects &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;0&lt;/span&gt;
 net.ipv4.tcp_max_syn_backlog &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1280&lt;/span&gt;
@@ -163,35 +163,31 @@ net.ipv4.conf.default.rp_filter &lt;span class="o"&gt;=&lt;/span&gt; &lt;span cl
 net.ipv4.tcp_mtu_probing &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-
 &lt;p&gt;As a side note, it is strongly recommended that you include &lt;code&gt;net.ipv4.tcp_mtu_probing = 1&lt;/code&gt; on the 
 &lt;code&gt;sysctl.conf&lt;/code&gt; of all of your Linux EC2 instances, since they use jumbo frames by default.&lt;/p&gt;
 &lt;p&gt;Let's make sure the machine is fully patched, that we can use EPEL and that we install StrongSwan
 by issuing the following commands:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yum install epel-release
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yum install epel-release
 yum repolist
 yum update
 yum install strongswan
 systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; strongswan
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-
 &lt;p&gt;In order to ensure the cryptography and logging work properly, the system needs to have proper time
 synchronization. Make sure &lt;a href="https://en.wikipedia.org/wiki/Network_Time_Protocol"&gt;NTP&lt;/a&gt; is installed and 
 configured to run on system start:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yum install ntp
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;yum install ntp
 systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; ntpd
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-
 &lt;p&gt;Replace the &lt;code&gt;server&lt;/code&gt; configuration entries in &lt;code&gt;/etc/ntp.conf&lt;/code&gt; so the AWS recommended NTP 
 server pool is used:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;server &lt;span class="m"&gt;0&lt;/span&gt;.amazon.pool.ntp.org iburst
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;server &lt;span class="m"&gt;0&lt;/span&gt;.amazon.pool.ntp.org iburst
 server &lt;span class="m"&gt;1&lt;/span&gt;.amazon.pool.ntp.org iburst
 server &lt;span class="m"&gt;2&lt;/span&gt;.amazon.pool.ntp.org iburst
 server &lt;span class="m"&gt;3&lt;/span&gt;.amazon.pool.ntp.org iburst
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
 
 &lt;p&gt;Finally, restart the NTP service with &lt;code&gt;systemctl restart ntpd&lt;/code&gt; and check that it is working properly 
 with &lt;code&gt;ntpq -p&lt;/code&gt;.&lt;/p&gt;
@@ -200,36 +196,33 @@ with &lt;code&gt;ntpq -p&lt;/code&gt;.&lt;/p&gt;
 those keys and associate them with the servers in the StrongSwan configuration.&lt;/p&gt;
 &lt;p&gt;On each StrongSwan instance, create its own RSA key. This is how you would do it on the us-east-1
 StrongSwan instance:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /etc/strongswan/ipsec.d/private/
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; /etc/strongswan/ipsec.d/private/
 openssl genrsa -out us-east-1.key &lt;span class="m"&gt;4096&lt;/span&gt;
 chmod og-r us-east-1.key
 openssl rsa -in us-east-1.key -pubout &amp;gt; ../certs/us-east-1.pub
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-
 &lt;p&gt;Once you do that, you need to edit &lt;code&gt;/etc/strongswan/ipsec.secrets&lt;/code&gt; to let StrongSwan know what to
 do with the private key. Add a line to that file that associates each instance's own elastic IP address
 to the key file. Assuming the elastic IP address of the us-east-1 StrongSwan instance is &lt;code&gt;1.2.3.4&lt;/code&gt;,
 this is what that line would look like:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4 : RSA us-east-1.key
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;&lt;span class="m"&gt;1&lt;/span&gt;.2.3.4 : RSA us-east-1.key
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
 
 &lt;p&gt;Then, you copy each StrongSwan instance's &lt;code&gt;.pub&lt;/code&gt; file to the &lt;code&gt;/etc/strongswan/ipsec.d/certs&lt;/code&gt; 
 directory of each of the other StrongSwan instances. In our example, if you were on the us-east-1 
 instance you would see something like this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ find /etc/strongswan/ipsec.d/ -name *.key
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;$ find /etc/strongswan/ipsec.d/ -name *.key
 /etc/strongswan/ipsec.d/private/us-east-1.key
 $ find /etc/strongswan/ipsec.d/ -name *.pub
 /etc/strongswan/ipsec.d/certs/us-east-1.pub
 /etc/strongswan/ipsec.d/certs/us-east-2.pub
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-
 &lt;p&gt;Finally, you configure &lt;code&gt;/etc/strongswan/ipsec.conf&lt;/code&gt; to tie it all together. This is what the
 configuration file would look like the the elastic IP for the us-east-1 and us-east-2 instances
 were 1.2.3.4 and 2.3.4.5, respectively:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;config setup
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;config setup
     &lt;span class="c1"&gt;# strictcrlpolicy=yes&lt;/span&gt;
     &lt;span class="c1"&gt;# uniqueids = no&lt;/span&gt;
 
@@ -254,11 +247,10 @@ conn us-east-2
     &lt;span class="nv"&gt;auto&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;start
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-
 &lt;p&gt;Keep in mind that &lt;code&gt;left&lt;/code&gt; in StrongSwan parlance means the side of the VPN that is local to 
 the instance you are configuring, and &lt;code&gt;right&lt;/code&gt; is the remote side. So the configuration file on
 the us-east-2 instance would look like this:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;config setup
+&lt;div class="bash highlight"&gt;&lt;pre&gt;&lt;span&gt;&lt;/span&gt;&lt;code&gt;config setup
     &lt;span class="c1"&gt;# strictcrlpolicy=yes&lt;/span&gt;
     &lt;span class="c1"&gt;# uniqueids = no&lt;/span&gt;
 
@@ -282,7 +274,6 @@ conn us-east-1
     &lt;span class="nv"&gt;rightrsasigkey&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;us-east-1.pub
     &lt;span class="nv"&gt;auto&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;start
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
 
 &lt;p&gt;Please review the StrongSwan 
 &lt;a href="https://wiki.strongswan.org/projects/strongswan/wiki/IpsecConf"&gt;documentation on ipsec.conf&lt;/a&gt; to
